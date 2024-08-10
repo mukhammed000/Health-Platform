@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package users;
+
+option go_package = "/users";
+
+service UsersService {
+    // Auth
+    rpc RegisterUser(Users) returns (RegisterResponse);
+    rpc LoginUser(LoginUserRequest) returns (LoginResponse);
+    rpc ValidateToken(ValidateTokenRequest) returns (TokenValidationResponse);
+    rpc RefreshToken(RefreshTokenRequest) returns (TokenResponse);
+    rpc ValidateEmail(VerifyEmailRequest) returns (Empty);
+
+    // Users
+    rpc GetUserProfile(GetUserProfileRequest) returns (UserProfileResponse);
+    rpc UpdateUserProfile(UpdateUserProfileRequest) returns (UserProfileResponse);
+    rpc DeleteUserProfile(DeleteUserProfileRequest) returns (Empty);
+}
+
+message RegisterUserRequest {
+    string email = 1;
+    string password = 2;
+    string first_name = 3;
+    string last_name = 4;
+    string date_of_birth = 5;
+    string gender = 6;
+}
+
+message VerifyEmailRequest{
+    string email = 1;
+}
+
+message LoginUserRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message ValidateTokenRequest {
+    string token = 1;
+}
+
+message RefreshTokenRequest {
+    string refresh_token = 1;
+}
+
+message GetUserProfileRequest {
+    string user_id = 1;
+}
+
+message UpdateUserProfileRequest {
+    string user_id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string date_of_birth = 4;
+    string gender = 5;
+}
+
+message DeleteUserProfileRequest {
+    string user_id = 1;
+}
+
+message Users {
+    string user_id = 1;
+    string email = 2;
+    string password_hash = 3;
+    string first_name = 4;
+    string last_name = 5;
+    string date_of_birth = 6;
+    string gender = 7;
+    string role = 8;
+    bool email_verified = 9;
+    string created_at = 10;
+    string updated_at = 11;
+    int64  deleted_at = 12;
+}
+
+message RegisterResponse {
+    string user_id = 1;
+    string access_token = 2;
+    string refresh_token = 3;
+    string expires_at = 4;
+}
+
+message LoginResponse {
+    string token = 1;
+    string refresh_token = 2;
+}
+
+message TokenValidationResponse {
+    bool is_valid = 1;
+    string user_id = 2;
+}
+
+message TokenResponse {
+    string token = 1;
+    string refresh_token = 2;
+    string expires_at = 3;
+}
+
+message UserProfileResponse {
+    string user_id = 1;
+    string email = 2;
+    string first_name = 3;
+    string last_name = 4;
+    string date_of_birth = 5;
+    string gender = 6;
+    string role = 7;
+}
+
+message Empty {
+    string text = 1;
+    string isDone = 2;
+}
