@@ -12,7 +12,7 @@ type UsersService interface {
 	// auth
 	RegisterUser(req *users.Users) (*users.RegisterResponse, error)
 	LoginUser(req *users.LoginUserRequest) (*users.LoginResponse, error)
-	ValidateToken(req *users.ValidateTokenRequest) (*users.TokenValidationResponse, error)
+	ValidateToken(req *users.ValidateTokenRequest) (*users.Empty, error)
 	RefreshToken(req *users.RefreshTokenRequest) (*users.TokenResponse, error)
 	ValidateEmail(req *users.VerifyEmailRequest) (*users.Empty, error)
 

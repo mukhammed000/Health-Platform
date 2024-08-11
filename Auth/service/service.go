@@ -37,7 +37,7 @@ func (s *UserService) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 	return resp, nil
 }
 
-func (s *UserService) ValidateToken(ctx context.Context, req *pb.ValidateTokenRequest) (*pb.TokenValidationResponse, error) {
+func (s *UserService) ValidateToken(ctx context.Context, req *pb.ValidateTokenRequest) (*pb.Empty, error) {
 	resp, err := s.stg.Users().ValidateToken(req)
 	if err != nil {
 		log.Printf("Error validating token: %v", err)

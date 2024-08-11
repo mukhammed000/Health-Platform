@@ -36,7 +36,7 @@ type UsersServiceClient interface {
 	// Auth
 	RegisterUser(ctx context.Context, in *Users, opts ...grpc.CallOption) (*RegisterResponse, error)
 	LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginResponse, error)
-	ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*TokenValidationResponse, error)
+	ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*Empty, error)
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*TokenResponse, error)
 	ValidateEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*Empty, error)
 	// Users
@@ -73,9 +73,9 @@ func (c *usersServiceClient) LoginUser(ctx context.Context, in *LoginUserRequest
 	return out, nil
 }
 
-func (c *usersServiceClient) ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*TokenValidationResponse, error) {
+func (c *usersServiceClient) ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(TokenValidationResponse)
+	out := new(Empty)
 	err := c.cc.Invoke(ctx, UsersService_ValidateToken_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -140,7 +140,7 @@ type UsersServiceServer interface {
 	// Auth
 	RegisterUser(context.Context, *Users) (*RegisterResponse, error)
 	LoginUser(context.Context, *LoginUserRequest) (*LoginResponse, error)
-	ValidateToken(context.Context, *ValidateTokenRequest) (*TokenValidationResponse, error)
+	ValidateToken(context.Context, *ValidateTokenRequest) (*Empty, error)
 	RefreshToken(context.Context, *RefreshTokenRequest) (*TokenResponse, error)
 	ValidateEmail(context.Context, *VerifyEmailRequest) (*Empty, error)
 	// Users
@@ -163,7 +163,7 @@ func (UnimplementedUsersServiceServer) RegisterUser(context.Context, *Users) (*R
 func (UnimplementedUsersServiceServer) LoginUser(context.Context, *LoginUserRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
 }
-func (UnimplementedUsersServiceServer) ValidateToken(context.Context, *ValidateTokenRequest) (*TokenValidationResponse, error) {
+func (UnimplementedUsersServiceServer) ValidateToken(context.Context, *ValidateTokenRequest) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateToken not implemented")
 }
 func (UnimplementedUsersServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*TokenResponse, error) {

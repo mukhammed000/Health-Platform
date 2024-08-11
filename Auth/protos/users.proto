@@ -8,7 +8,7 @@ service UsersService {
     // Auth
     rpc RegisterUser(Users) returns (RegisterResponse);
     rpc LoginUser(LoginUserRequest) returns (LoginResponse);
-    rpc ValidateToken(ValidateTokenRequest) returns (TokenValidationResponse);
+    rpc ValidateToken(ValidateTokenRequest) returns (Empty);
     rpc RefreshToken(RefreshTokenRequest) returns (TokenResponse);
     rpc ValidateEmail(VerifyEmailRequest) returns (Empty);
 
@@ -69,10 +69,13 @@ message Users {
     string date_of_birth = 6;
     string gender = 7;
     string role = 8;
-    bool email_verified = 9;
-    string created_at = 10;
-    string updated_at = 11;
-    int64  deleted_at = 12;
+    string access_token = 9;
+    string referesh_token = 10;
+    string expires_at = 11;
+    bool email_verified = 12;
+    string created_at = 13;
+    string updated_at = 14;
+    int64  deleted_at = 15;
 }
 
 message RegisterResponse {
@@ -83,13 +86,10 @@ message RegisterResponse {
 }
 
 message LoginResponse {
-    string token = 1;
-    string refresh_token = 2;
-}
-
-message TokenValidationResponse {
-    bool is_valid = 1;
-    string user_id = 2;
+    string user_id = 1;
+    string token = 2;
+    string refresh_token = 3;
+    string expires_at = 4;
 }
 
 message TokenResponse {
@@ -110,5 +110,5 @@ message UserProfileResponse {
 
 message Empty {
     string text = 1;
-    string isDone = 2;
+    bool isDone = 2;
 }
