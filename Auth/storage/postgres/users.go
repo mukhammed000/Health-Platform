@@ -4,9 +4,11 @@ import (
 	"auth/genproto/users"
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 	"time"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,8 +30,8 @@ func hashPassword(password string) (string, error) {
 
 func (u *UserStorage) RegisterUser(req *users.Users) (*users.RegisterResponse, error) {
 	query := `
-		INSERT INTO users (user_id, email, password_hash, first_name, last_name, date_of_birth, gender, role)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		INSERT INTO users (user_id, email, password_hash, first_name, last_name, date_of_birth, gender, role, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
 		RETURNING user_id
 	`
 
@@ -38,7 +40,7 @@ func (u *UserStorage) RegisterUser(req *users.Users) (*users.RegisterResponse, e
 		log.Fatalln("Error while hashing the password")
 	}
 
-	_, err = u.db.Exec(query, req.UserId, req.Email, password, req.FirstName, req.LastName, req.DateOfBirth, req.Gender, req.Role)
+	_, err = u.db.Exec(query, req.UserId, req.Email, password, req.FirstName, req.LastName, req.DateOfBirth, req.Gender, req.Role, req.CreatedAt, req.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -50,8 +52,19 @@ func (u *UserStorage) RegisterUser(req *users.Users) (*users.RegisterResponse, e
 		ExpiresAt:    req.ExpiresAt,
 	}
 
+	token_query := `
+	INSERT INTO tokens (user_id, token_id, access_token, refresh_token, expires_at, created_at)
+	VALUES ($1, $2, $3, $4, $5, $6)
+	`
+
+	_, err = u.db.Exec(token_query, req.UserId, uuid.NewString(), req.AccessToken, req.RefereshToken, req.ExpiresAt, req.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+
 	return response, nil
 }
+
 
 func (u *UserStorage) LoginUser(req *users.LoginUserRequest) (*users.LoginResponse, error) {
 	var storedPasswordHash string
@@ -81,7 +94,7 @@ func (u *UserStorage) LoginUser(req *users.LoginUserRequest) (*users.LoginRespon
 		WHERE user_id = $1
 	`
 	var accessToken, refreshToken string
-	var expiresAt time.Time
+	var expiresAt string
 
 	err = u.db.QueryRow(tokenQuery, userID).Scan(&accessToken, &refreshToken, &expiresAt)
 	if err != nil {
@@ -95,7 +108,7 @@ func (u *UserStorage) LoginUser(req *users.LoginUserRequest) (*users.LoginRespon
 		UserId:       userID,
 		Token:        accessToken,
 		RefreshToken: refreshToken,
-		ExpiresAt:    expiresAt.Format(time.RFC3339),
+		ExpiresAt:    expiresAt,
 	}
 
 	return response, nil
@@ -220,4 +233,50 @@ func (u *UserStorage) DeleteUserProfile(req *users.DeleteUserProfileRequest) (*u
 	}
 
 	return &users.Empty{}, nil
+}
+
+func (u *UserStorage) ChangePassword(req *users.ChangePasswordReq) (*users.Empty, error) {
+	var currentPasswordHash string
+	query := `
+		SELECT password_hash
+		FROM users
+		WHERE user_id = $1 AND deleted_at = 0
+	`
+	err := u.db.QueryRow(query, req.UserId).Scan(&currentPasswordHash)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return &users.Empty{IsDone: false, Text: "User not found or already deleted"}, nil
+		}
+		return nil, fmt.Errorf("could not fetch user: %v", err)
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(currentPasswordHash), []byte(req.CurrentPassword))
+	if err != nil {
+		return &users.Empty{IsDone: false, Text: "Current password is incorrect"}, nil
+	}
+
+	hashedNewPassword, err := hashPassword(req.NewPassword)
+	if err != nil {
+		return nil, fmt.Errorf("could not hash new password: %v", err)
+	}
+
+	updateQuery := `
+		UPDATE users
+		SET password_hash = $1, updated_at = CURRENT_TIMESTAMP
+		WHERE user_id = $2 AND deleted_at = 0
+	`
+	result, err := u.db.Exec(updateQuery, hashedNewPassword, req.UserId)
+	if err != nil {
+		return &users.Empty{IsDone: false, Text: "Failed to update password"}, fmt.Errorf("could not change password: %v", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return &users.Empty{IsDone: false, Text: "Failed to update password"}, fmt.Errorf("could not determine rows affected: %v", err)
+	}
+	if rowsAffected == 0 {
+		return &users.Empty{IsDone: false, Text: "Failed to update password"}, fmt.Errorf("no rows were updated")
+	}
+
+	return &users.Empty{IsDone: true, Text: "Password successfully changed"}, nil
 }

@@ -1,0 +1,415 @@
+basePath: /
+definitions:
+  users.ChangePasswordReq:
+    properties:
+      current_password:
+        type: string
+      new_password:
+        type: string
+      user_id:
+        type: string
+    type: object
+  users.DeleteUserProfileRequest:
+    properties:
+      user_id:
+        type: string
+    type: object
+  users.Empty:
+    properties:
+      isDone:
+        type: boolean
+      text:
+        type: string
+    type: object
+  users.LoginResponse:
+    properties:
+      expires_at:
+        type: string
+      refresh_token:
+        type: string
+      token:
+        type: string
+      user_id:
+        type: string
+    type: object
+  users.LoginUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  users.RefreshTokenRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  users.RegisterResponse:
+    properties:
+      access_token:
+        type: string
+      expires_at:
+        type: string
+      refresh_token:
+        type: string
+      user_id:
+        type: string
+    type: object
+  users.RegisterUserRequest:
+    properties:
+      date_of_birth:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+    type: object
+  users.TokenResponse:
+    properties:
+      expires_at:
+        type: string
+      refresh_token:
+        type: string
+      token:
+        type: string
+    type: object
+  users.UpdateUserProfileRequest:
+    properties:
+      date_of_birth:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: string
+      last_name:
+        type: string
+      user_id:
+        type: string
+    type: object
+  users.UserProfileResponse:
+    properties:
+      date_of_birth:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: string
+      last_name:
+        type: string
+      role:
+        type: string
+      user_id:
+        type: string
+    type: object
+  users.ValidateTokenRequest:
+    properties:
+      token:
+        type: string
+    type: object
+  users.VerifyEmailRequest:
+    properties:
+      email:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Voting service
+  title: Voting service
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user with email and password
+      parameters:
+      - description: User login details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/users.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Login a user
+      tags:
+      - Auth
+  /auth/refreshToken:
+    post:
+      consumes:
+      - application/json
+      description: Refresh a user's access token using the refresh token
+      parameters:
+      - description: Token refresh details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/users.RefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Refresh an access token
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with email, password, and personal details
+      parameters:
+      - description: User registration details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/users.RegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Register a new user
+      tags:
+      - Auth
+  /auth/validateEmail:
+    post:
+      consumes:
+      - application/json
+      description: Validate a user's email
+      parameters:
+      - description: Email validation details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/users.VerifyEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.Empty'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Validate email
+      tags:
+      - Auth
+  /auth/validateToken:
+    post:
+      consumes:
+      - application/json
+      description: Validate a user's access token
+      parameters:
+      - description: Token validation details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/users.ValidateTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.Empty'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      - BearerAuth: []
+      summary: Validate an access token
+      tags:
+      - Auth
+  /users/change-password:
+    post:
+      consumes:
+      - application/json
+      description: Change user password by providing the current and new password\
+      parameters:
+      - description: Change password details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/users.ChangePasswordReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.Empty'
+        "400":
+          description: Error while changing the password
+          schema:
+            type: string
+        "500":
+          description: Error while changing the password
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Change user password
+      tags:
+      - Users
+  /users/deleteProfile:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user profile by user ID
+      parameters:
+      - description: User profile delete details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/users.DeleteUserProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.Empty'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete user profile
+      tags:
+      - Users
+  /users/profile/{user_id}:
+    get:
+      description: Get user profile information by user ID
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.UserProfileResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get user profile information
+      tags:
+      - Users
+  /users/updateProfile:
+    put:
+      consumes:
+      - application/json
+      description: Update user profile details
+      parameters:
+      - description: User profile update details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/users.UpdateUserProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.UserProfileResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Update user profile
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

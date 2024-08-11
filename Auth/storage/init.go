@@ -20,4 +20,5 @@ type UsersService interface {
 	GetUserProfile(req *users.GetUserProfileRequest) (*users.UserProfileResponse, error)
 	UpdateUserProfile(req *users.UpdateUserProfileRequest) (*users.UserProfileResponse, error)
 	DeleteUserProfile(req *users.DeleteUserProfileRequest) (*users.Empty, error)
+	ChangePassword(req *users.ChangePasswordReq) (*users.Empty, error)
 }
