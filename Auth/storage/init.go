@@ -15,6 +15,7 @@ type UsersService interface {
 	ValidateToken(req *users.ValidateTokenRequest) (*users.Empty, error)
 	RefreshToken(req *users.RefreshTokenRequest) (*users.TokenResponse, error)
 	ValidateEmail(req *users.VerifyEmailRequest) (*users.Empty, error)
+	EnterTheValidationCode(req *users.VerificationCode) (*users.Empty, error)
 
 	// users
 	GetUserProfile(req *users.GetUserProfileRequest) (*users.UserProfileResponse, error)

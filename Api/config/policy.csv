@@ -15,6 +15,6 @@ p, unauthorized, /auth/refreshToken, POST
 p, unauthorized, /auth/validateEmail, POST
 
 p, user, /users/profile/:user_id, GET
+p, user, /users/deleteProfile/:user_id, DELETE
 p, user, /users/updateProfile, PUT
-p, user, /users/deleteProfile, DELETE
 p, user, /users/change-password, POST

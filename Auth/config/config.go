@@ -9,7 +9,9 @@ import (
 )
 
 type Config struct {
-	HTTPPort string
+	HTTPPort  string
+	RedisHost string
+	RedisPort int64
 
 	PostgresHost     string
 	PostgresPort     int
@@ -26,6 +28,8 @@ func Load() Config {
 	config := Config{}
 
 	config.HTTPPort = cast.ToString(getOrReturnDefaultValue("HTTP_PORT", ":8081"))
+	config.RedisHost = cast.ToString(getOrReturnDefaultValue("RedisHost", "localhost"))
+	config.RedisPort = cast.ToInt64(getOrReturnDefaultValue("RedisPort", 6379))
 
 	config.PostgresHost = cast.ToString(getOrReturnDefaultValue("POSTGRES_HOST", "localhost"))
 	config.PostgresPort = cast.ToInt(getOrReturnDefaultValue("POSTGRES_PORT", 5432))

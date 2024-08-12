@@ -118,5 +118,5 @@ func GetIdFromToken(r *http.Request, cfg *config.Config) (string, int) {
 		return "unauthorized", http.StatusUnauthorized
 	}
 
-	return cast.ToString(claims["username"]), 0
+	return cast.ToString(claims["email"]), 0
 }

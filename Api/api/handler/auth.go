@@ -4,6 +4,7 @@ import (
 	"api/api/token"
 	"api/genproto/users"
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -90,7 +91,7 @@ func (h *Handler) Login(c *gin.Context) {
 // @Description Validate a user's access token
 // @Security BearerAuth
 // @Security BearerAuth
-// @Tags Auth	
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param body body users.ValidateTokenRequest true "Token validation details"
@@ -230,17 +231,16 @@ func (h *Handler) UpdateProfile(c *gin.Context) {
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Param body body users.DeleteUserProfileRequest true "User profile delete details"
+// @Param user_id path string true "User ID"
 // @Success 200 {object} users.Empty
 // @Failure 400 {string} string "Bad Request"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /users/deleteProfile [delete]
+// @Router /users/deleteProfile/{user_id} [delete]
 func (h *Handler) DeleteProfile(c *gin.Context) {
+	userID := c.Param("user_id")
 	var req users.DeleteUserProfileRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+
+	req.UserId = userID
 
 	res, err := h.Auth.DeleteUserProfile(context.Background(), &req)
 	if err != nil {
@@ -278,3 +278,42 @@ func (h *Handler) ChangePassword(c *gin.Context) {
 
 	c.JSON(http.StatusOK, res)
 }
+
+// VerificationCode godoc
+// @Summary Verify a verification code
+// @Description Verify the provided verification code and print the associated email if valid
+// @Security BearerAuth
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param body body users.VerificationCode true "Verification code details"
+// @Success 200 {object} users.Empty
+// @Failure 400 {string} string "Invalid or expired verification code"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /auth/verifyCode [post]
+func (h *Handler) VerificationCode(c *gin.Context) {
+	var req users.VerificationCode
+
+	// Bind the JSON request body to the req object
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Log the verification code for debugging
+	fmt.Println("Verification code received:", req.VerificationCode)
+
+	// Call the service method to validate the code
+	res, err := h.Auth.EnterTheValidationCode(context.Background(), &req)
+	if err != nil {
+		if err.Error() == "verification code is invalid or expired" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+

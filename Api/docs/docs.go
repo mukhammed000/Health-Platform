@@ -273,6 +273,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/verifyCode": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Verify the provided verification code and print the associated email if valid",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Verify a verification code",
+                "parameters": [
+                    {
+                        "description": "Verification code details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/users.VerificationCode"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/users.Empty"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid or expired verification code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/users/change-password": {
             "post": {
                 "security": [
@@ -324,7 +375,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/deleteProfile": {
+        "/users/deleteProfile/{user_id}": {
             "delete": {
                 "security": [
                     {
@@ -344,13 +395,11 @@ const docTemplate = `{
                 "summary": "Delete user profile",
                 "parameters": [
                     {
-                        "description": "User profile delete details",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/users.DeleteUserProfileRequest"
-                        }
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -477,14 +526,6 @@ const docTemplate = `{
                 "new_password": {
                     "type": "string"
                 },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "users.DeleteUserProfileRequest": {
-            "type": "object",
-            "properties": {
                 "user_id": {
                     "type": "string"
                 }
@@ -641,6 +682,14 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "users.VerificationCode": {
+            "type": "object",
+            "properties": {
+                "verificationCode": {
                     "type": "string"
                 }
             }

@@ -19,15 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UsersService_RegisterUser_FullMethodName      = "/users.UsersService/RegisterUser"
-	UsersService_LoginUser_FullMethodName         = "/users.UsersService/LoginUser"
-	UsersService_ValidateToken_FullMethodName     = "/users.UsersService/ValidateToken"
-	UsersService_RefreshToken_FullMethodName      = "/users.UsersService/RefreshToken"
-	UsersService_ValidateEmail_FullMethodName     = "/users.UsersService/ValidateEmail"
-	UsersService_GetUserProfile_FullMethodName    = "/users.UsersService/GetUserProfile"
-	UsersService_UpdateUserProfile_FullMethodName = "/users.UsersService/UpdateUserProfile"
-	UsersService_DeleteUserProfile_FullMethodName = "/users.UsersService/DeleteUserProfile"
-	UsersService_ChangePassword_FullMethodName    = "/users.UsersService/ChangePassword"
+	UsersService_RegisterUser_FullMethodName           = "/users.UsersService/RegisterUser"
+	UsersService_LoginUser_FullMethodName              = "/users.UsersService/LoginUser"
+	UsersService_ValidateToken_FullMethodName          = "/users.UsersService/ValidateToken"
+	UsersService_RefreshToken_FullMethodName           = "/users.UsersService/RefreshToken"
+	UsersService_ValidateEmail_FullMethodName          = "/users.UsersService/ValidateEmail"
+	UsersService_EnterTheValidationCode_FullMethodName = "/users.UsersService/EnterTheValidationCode"
+	UsersService_GetUserProfile_FullMethodName         = "/users.UsersService/GetUserProfile"
+	UsersService_UpdateUserProfile_FullMethodName      = "/users.UsersService/UpdateUserProfile"
+	UsersService_DeleteUserProfile_FullMethodName      = "/users.UsersService/DeleteUserProfile"
+	UsersService_ChangePassword_FullMethodName         = "/users.UsersService/ChangePassword"
 )
 
 // UsersServiceClient is the client API for UsersService service.
@@ -40,6 +41,7 @@ type UsersServiceClient interface {
 	ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*Empty, error)
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*TokenResponse, error)
 	ValidateEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*Empty, error)
+	EnterTheValidationCode(ctx context.Context, in *VerificationCode, opts ...grpc.CallOption) (*Empty, error)
 	// Users
 	GetUserProfile(ctx context.Context, in *GetUserProfileRequest, opts ...grpc.CallOption) (*UserProfileResponse, error)
 	UpdateUserProfile(ctx context.Context, in *UpdateUserProfileRequest, opts ...grpc.CallOption) (*UserProfileResponse, error)
@@ -105,6 +107,16 @@ func (c *usersServiceClient) ValidateEmail(ctx context.Context, in *VerifyEmailR
 	return out, nil
 }
 
+func (c *usersServiceClient) EnterTheValidationCode(ctx context.Context, in *VerificationCode, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, UsersService_EnterTheValidationCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *usersServiceClient) GetUserProfile(ctx context.Context, in *GetUserProfileRequest, opts ...grpc.CallOption) (*UserProfileResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UserProfileResponse)
@@ -155,6 +167,7 @@ type UsersServiceServer interface {
 	ValidateToken(context.Context, *ValidateTokenRequest) (*Empty, error)
 	RefreshToken(context.Context, *RefreshTokenRequest) (*TokenResponse, error)
 	ValidateEmail(context.Context, *VerifyEmailRequest) (*Empty, error)
+	EnterTheValidationCode(context.Context, *VerificationCode) (*Empty, error)
 	// Users
 	GetUserProfile(context.Context, *GetUserProfileRequest) (*UserProfileResponse, error)
 	UpdateUserProfile(context.Context, *UpdateUserProfileRequest) (*UserProfileResponse, error)
@@ -184,6 +197,9 @@ func (UnimplementedUsersServiceServer) RefreshToken(context.Context, *RefreshTok
 }
 func (UnimplementedUsersServiceServer) ValidateEmail(context.Context, *VerifyEmailRequest) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateEmail not implemented")
+}
+func (UnimplementedUsersServiceServer) EnterTheValidationCode(context.Context, *VerificationCode) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EnterTheValidationCode not implemented")
 }
 func (UnimplementedUsersServiceServer) GetUserProfile(context.Context, *GetUserProfileRequest) (*UserProfileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserProfile not implemented")
@@ -308,6 +324,24 @@ func _UsersService_ValidateEmail_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UsersService_EnterTheValidationCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerificationCode)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UsersServiceServer).EnterTheValidationCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UsersService_EnterTheValidationCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UsersServiceServer).EnterTheValidationCode(ctx, req.(*VerificationCode))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UsersService_GetUserProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUserProfileRequest)
 	if err := dec(in); err != nil {
@@ -406,6 +440,10 @@ var UsersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ValidateEmail",
 			Handler:    _UsersService_ValidateEmail_Handler,
+		},
+		{
+			MethodName: "EnterTheValidationCode",
+			Handler:    _UsersService_EnterTheValidationCode_Handler,
 		},
 		{
 			MethodName: "GetUserProfile",

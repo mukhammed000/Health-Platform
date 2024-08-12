@@ -9,11 +9,6 @@ definitions:
       user_id:
         type: string
     type: object
-  users.DeleteUserProfileRequest:
-    properties:
-      user_id:
-        type: string
-    type: object
   users.Empty:
     properties:
       isDone:
@@ -112,6 +107,11 @@ definitions:
   users.ValidateTokenRequest:
     properties:
       token:
+        type: string
+    type: object
+  users.VerificationCode:
+    properties:
+      verificationCode:
         type: string
     type: object
   users.VerifyEmailRequest:
@@ -286,6 +286,39 @@ paths:
       summary: Validate an access token
       tags:
       - Auth
+  /auth/verifyCode:
+    post:
+      consumes:
+      - application/json
+      description: Verify the provided verification code and print the associated
+        email if valid
+      parameters:
+      - description: Verification code details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/users.VerificationCode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.Empty'
+        "400":
+          description: Invalid or expired verification code
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Verify a verification code
+      tags:
+      - Auth
   /users/change-password:
     post:
       consumes:
@@ -318,18 +351,17 @@ paths:
       summary: Change user password
       tags:
       - Users
-  /users/deleteProfile:
+  /users/deleteProfile/{user_id}:
     delete:
       consumes:
       - application/json
       description: Delete user profile by user ID
       parameters:
-      - description: User profile delete details
-        in: body
-        name: body
+      - description: User ID
+        in: path
+        name: user_id
         required: true
-        schema:
-          $ref: '#/definitions/users.DeleteUserProfileRequest'
+        type: string
       produces:
       - application/json
       responses:

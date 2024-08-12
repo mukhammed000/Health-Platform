@@ -2,22 +2,32 @@ package postgres
 
 import (
 	"auth/genproto/users"
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
 	"log"
+	"math/rand"
+	"strings"
 	"time"
 
+	h "auth/helper"
+
+	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserStorage struct {
-	db *sql.DB
+	db  *sql.DB
+	rdb *redis.Client
 }
 
-func NewUserStorage(db *sql.DB) *UserStorage {
-	return &UserStorage{db: db}
+func NewUserStorage(db *sql.DB, rdb *redis.Client) *UserStorage {
+	return &UserStorage{
+		db:  db,
+		rdb: rdb,
+	}
 }
 
 func hashPassword(password string) (string, error) {
@@ -64,7 +74,6 @@ func (u *UserStorage) RegisterUser(req *users.Users) (*users.RegisterResponse, e
 
 	return response, nil
 }
-
 
 func (u *UserStorage) LoginUser(req *users.LoginUserRequest) (*users.LoginResponse, error) {
 	var storedPasswordHash string
@@ -115,7 +124,7 @@ func (u *UserStorage) LoginUser(req *users.LoginUserRequest) (*users.LoginRespon
 }
 
 func (u *UserStorage) ValidateToken(req *users.ValidateTokenRequest) (*users.Empty, error) {
-	var expiresAt time.Time
+	var expiresAt string
 
 	query := `
 		SELECT expires_at
@@ -127,14 +136,23 @@ func (u *UserStorage) ValidateToken(req *users.ValidateTokenRequest) (*users.Emp
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return &users.Empty{
-				Text:   "Token does not exsists in database! ",
+				Text:   "Token does not exist in the database!",
 				IsDone: false,
 			}, nil
 		}
 		return nil, err
 	}
 
-	if time.Now().After(expiresAt) {
+	expiresAt = strings.Split(expiresAt, " m=")[0]
+
+	const layout = "2006-01-02 15:04:05.999999999 -0700 MST"
+
+	expiredAt, err := time.Parse(layout, expiresAt)
+	if err != nil {
+		log.Fatalln("Error while parsing the time", err)
+	}
+
+	if time.Now().After(expiredAt) {
 		return &users.Empty{
 			Text:   "Token is already expired",
 			IsDone: false,
@@ -153,8 +171,30 @@ func (u *UserStorage) RefreshToken(req *users.RefreshTokenRequest) (*users.Token
 }
 
 func (u *UserStorage) ValidateEmail(req *users.VerifyEmailRequest) (*users.Empty, error) {
-	// Implement the logic to validate an email
-	return nil, nil
+	code := rand.Intn(899999) + 10000
+
+	from := "muhammadjonxudaynazarov226@gmail.com"
+	password := "rgkt oivo pyst zplt"
+	err := h.SendVerificationCode(h.Params{
+		From:     from,
+		Password: password,
+		To:       req.Email,
+		Message:  fmt.Sprintf("Hi, here is your verification code: %d", code),
+		Code:     fmt.Sprint(code),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to send verification email: %v", err)
+	}
+
+	err = u.rdb.Set(context.Background(), fmt.Sprint(code), req.Email, time.Minute*10).Err()
+	if err != nil {
+		return nil, fmt.Errorf("failed to store verification code in Redis: %v", err)
+	}
+
+	return &users.Empty{
+		Text:   "A verification code has been sent to your email address.",
+		IsDone: true,
+	}, nil
 }
 
 func (u *UserStorage) GetUserProfile(req *users.GetUserProfileRequest) (*users.UserProfileResponse, error) {
@@ -216,23 +256,27 @@ func (u *UserStorage) UpdateUserProfile(req *users.UpdateUserProfileRequest) (*u
 func (u *UserStorage) DeleteUserProfile(req *users.DeleteUserProfileRequest) (*users.Empty, error) {
 	query := `
 		UPDATE users
-		SET deleted_at = $1, updated_at = CURRENT_TIMESTAMP
+		SET deleted_at = $1
 		WHERE user_id = $2 AND deleted_at = 0
-		RETURNING user_id
+
 	`
 
 	currentTime := time.Now().Unix()
 
-	var userID string
-	err := u.db.QueryRow(query, currentTime, req.UserId).Scan(&userID)
+	res, err := u.db.Exec(query, currentTime, req.UserId)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.New("user not found or already deleted")
-		}
-		return nil, err
+		return nil, errors.New("error executing the query: " + err.Error())
 	}
 
-	return &users.Empty{}, nil
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return nil, errors.New("error retrieving rows affected: " + err.Error())
+	}
+	if rowsAffected == 0 {
+		return nil, errors.New("user not found or already deleted")
+	}
+
+	return &users.Empty{Text: "User deleted successfully", IsDone: true}, nil
 }
 
 func (u *UserStorage) ChangePassword(req *users.ChangePasswordReq) (*users.Empty, error) {
@@ -279,4 +323,32 @@ func (u *UserStorage) ChangePassword(req *users.ChangePasswordReq) (*users.Empty
 	}
 
 	return &users.Empty{IsDone: true, Text: "Password successfully changed"}, nil
+}
+
+func (u *UserStorage) EnterTheValidationCode(req *users.VerificationCode) (*users.Empty, error) {
+
+	storedEmail, err := u.rdb.Get(context.Background(), req.VerificationCode).Result()
+	if err == redis.Nil {
+		return nil, fmt.Errorf("verification code is invalid or expired")
+	} else if err != nil {
+		return nil, fmt.Errorf("failed to retrieve verification code from Redis: %v", err)
+	}
+
+	err = u.rdb.Del(context.Background(), req.VerificationCode).Err()
+	if err != nil {
+		return nil, fmt.Errorf("failed to delete verification code from Redis: %v", err)
+	}
+
+	_, err = u.db.Exec(
+		"UPDATE users SET email_verified = true WHERE email = $1",
+		storedEmail,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update email verification status in database: %v", err)
+	}
+
+	return &users.Empty{
+		Text:   "Verification code is valid",
+		IsDone: true,
+	}, nil
 }
