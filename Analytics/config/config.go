@@ -27,7 +27,7 @@ func Load() Config {
 
 	config := Config{}
 
-	config.HTTPPort = cast.ToString(getOrReturnDefaultValue("HTTP_PORT", ":8081"))
+	config.HTTPPort = cast.ToString(getOrReturnDefaultValue("HTTP_PORT", ":8082"))
 	config.RedisHost = cast.ToString(getOrReturnDefaultValue("RedisHost", "localhost"))
 	config.RedisPort = cast.ToInt64(getOrReturnDefaultValue("RedisPort", 6379))
 

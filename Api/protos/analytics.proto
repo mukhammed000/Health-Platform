@@ -1,0 +1,266 @@
+syntax = "proto3";
+
+package analytics;
+
+option go_package = "/analytics";
+
+service AnalyticsService {
+    // Medical records
+    rpc AddMedicalRecord(AddMedicalRecordReq) returns (AddMedicalRecordRes);
+    rpc GetMedicalRecord(GetMedicalRecordsReq) returns (GetMedicalRecordsRes);
+    rpc GetMedicalRecordsById(GetMedicalRecordsByIdReq) returns (GetMedicalRecordsByIdRes);
+    rpc UpdateMedicalRecord(UpdateMedicalRecordReq) returns (Empty);
+    rpc DeleteMedicalRecord(DeleteMedicalRecordReq) returns (Empty);
+    rpc ListMedicalRecords(ListMedicalRecordsReq) returns (ListMedicalRecordsRes);
+
+    // Lifestyle data
+    rpc AddLifestyleData(AddLifestyleDataReq) returns (AddLifestyleDataRes);
+    rpc GetLifestyleData(GetLifestyleDataReq) returns (GetLifestyleDataRes);
+    rpc GetLifestyleDataById(GetLifestyleDataByIdReq) returns (GetLifestyleDataByIdRes);
+    rpc UpdateLifestyleData(UpdateLifestyleDataReq) returns (Empty);
+    rpc DeleteLifestyleData(DeleteLifestyleDataReq) returns (Empty);
+
+    // Wearable Data
+    rpc AddWearableData(AddWearableDataReq) returns (AddWearableDataRes);
+    rpc GetWearableData(GetWearableDataReq) returns (GetWearableDataRes);
+    rpc GetWearableDataById(GetWearableDataByIdReq) returns (GetWearableDataByIdRes);
+    rpc UpdateWearableData(UpdateWearableDataReq) returns (Empty);
+    rpc DeleteWearableData(DeleteWearableDataReq) returns (Empty);
+
+    // Health recommendations
+    rpc GenerateHealthRecommendations(GenerateHealthRecommendationsReq) returns (GenerateHealthRecommendationsRes);
+    rpc GetHealthRecommendationsById(GetHealthRecommendationsByIdReq) returns (GetHealthRecommendationsByIdRes);
+
+    // Health monitoring
+    rpc GetRealtimeHealthMonitoring(GetRealtimeHealthMonitoringReq) returns (GetRealtimeHealthMonitoringRes);
+    rpc GetDailyHealthSummary(GetDailyHealthSummaryReq) returns (GetDailyHealthSummaryRes);
+    rpc GetWeeklyHealthSummary(GetWeeklyHealthSummaryReq) returns (GetWeeklyHealthSummaryRes);
+}
+
+message AddMedicalRecordReq {
+    string id = 1;
+    string user_id = 2;
+    string record_type = 3;
+    string record_date = 4; // timestamp as string
+    string description = 5;
+    string doctor_id = 6;
+    repeated string attachments = 7;
+    string created_at = 8; // timestamp as string
+    string updated_at = 9; // timestamp as string
+}
+
+message AddMedicalRecordRes {
+    string id = 1;
+    string user_id = 2;
+    string record_type = 3;
+    string record_date = 4; // timestamp as string
+    string description = 5;
+    string doctor_id = 6;
+    repeated string attachments = 7;
+    string created_at = 8; // timestamp as string
+}
+
+message GetMedicalRecordsByIdReq {
+    string user_id = 1;
+    string record_id = 2;
+}
+
+message GetMedicalRecordsByIdRes {
+    AddMedicalRecordRes info = 1;
+}
+
+message GetMedicalRecordsReq {
+    string user_id = 1;
+}
+
+message GetMedicalRecordsRes {
+    repeated AddMedicalRecordRes records = 1;
+}
+
+message UpdateMedicalRecordReq {
+    string id = 1;
+    string user_id = 2;
+    string record_type = 3;
+    string record_date = 4; // timestamp as string
+    string description = 5;
+    string doctor_id = 6;
+    repeated string attachments = 7;
+    string updated_at = 8; // timestamp as string
+}
+
+message DeleteMedicalRecordReq {
+    string id = 1;
+    string user_id = 2;
+}
+
+message ListMedicalRecordsReq {
+    string user_id = 1;
+}
+
+message ListMedicalRecordsRes {
+    repeated AddMedicalRecordRes records = 1;
+}
+
+// Lifestyle Data
+message AddLifestyleDataReq {
+    string id = 1;
+    string user_id = 2;
+    string data_type = 3;
+    string data_value = 4;
+    string recorded_date = 5; // timestamp as string
+    string created_at = 6; // timestamp as string
+    string updated_at = 7; // timestamp as string
+}
+
+message AddLifestyleDataRes {
+    string id = 1;
+    string user_id = 2;
+    string data_type = 3;
+    string data_value = 4;
+    string recorded_date = 5; // timestamp as string
+    string created_at = 6; // timestamp as string
+}
+
+message GetLifestyleDataReq {
+    string user_id = 1;
+}
+
+message GetLifestyleDataRes {
+    repeated AddLifestyleDataRes data = 1;
+}
+
+message GetLifestyleDataByIdReq {
+    string user_id = 1;
+    string data_id = 2;
+}
+
+message GetLifestyleDataByIdRes {
+    AddLifestyleDataRes info = 1;
+}
+
+message UpdateLifestyleDataReq {
+    string id = 1;
+    string user_id = 2;
+    string data_type = 3;
+    string data_value = 4;
+    string recorded_date = 5; // timestamp as string
+    string updated_at = 6; // timestamp as string
+}
+
+message DeleteLifestyleDataReq {
+    string id = 1;
+    string user_id = 2;
+}
+
+// Wearable Data
+message AddWearableDataReq {
+    string id = 1;
+    string user_id = 2;
+    string device_type = 3;
+    string data_type = 4;
+    string data_value = 5;
+    string recorded_timestamp = 6; // timestamp as string
+    string created_at = 7; // timestamp as string
+    string updated_at = 8; // timestamp as string
+}
+
+message AddWearableDataRes {
+    string id = 1;
+    string user_id = 2;
+    string device_type = 3;
+    string data_type = 4;
+    string data_value = 5;
+    string recorded_timestamp = 6; // timestamp as string
+    string created_at = 7; // timestamp as string
+}
+
+message GetWearableDataReq {
+    string user_id = 1;
+}
+
+message GetWearableDataRes {
+    repeated AddWearableDataRes data = 1;
+}
+
+message GetWearableDataByIdReq {
+    string user_id = 1;
+    string data_id = 2;
+}
+
+message GetWearableDataByIdRes {
+    AddWearableDataRes info = 1;
+}
+
+message UpdateWearableDataReq {
+    string id = 1;
+    string user_id = 2;
+    string device_type = 3;
+    string data_type = 4;
+    string data_value = 5;
+    string recorded_timestamp = 6; // timestamp as string
+    string updated_at = 7; // timestamp as string
+}
+
+message DeleteWearableDataReq {
+    string id = 1;
+    string user_id = 2;
+}
+
+// Health Recommendations
+message GenerateHealthRecommendationsReq {
+    string user_id = 1;
+    string recommendation_type = 2;
+    string description = 3;
+    int32 priority = 4;
+    string created_at = 5; // timestamp as string
+    string updated_at = 6; // timestamp as string
+}
+
+message GenerateHealthRecommendationsRes {
+    string id = 1;
+    string user_id = 2;
+    string recommendation_type = 3;
+    string description = 4;
+    int32 priority = 5;
+    string created_at = 6; // timestamp as string
+    string updated_at = 7; // timestamp as string
+}
+
+message GetHealthRecommendationsByIdReq {
+    string user_id = 1;
+    string recommendation_id = 2;
+}
+
+message GetHealthRecommendationsByIdRes {
+    GenerateHealthRecommendationsRes info = 1;
+}
+
+// Health Monitoring
+message GetRealtimeHealthMonitoringReq {
+    string user_id = 1;
+}
+
+message GetRealtimeHealthMonitoringRes {
+    string user_id = 1;
+    map<string, string> monitoring_data = 2; // key-value pairs for monitoring data
+}
+
+message GetDailyHealthSummaryReq {
+    string user_id = 1;
+}
+
+message GetDailyHealthSummaryRes {
+    string user_id = 1;
+    string summary = 2;
+}
+
+message GetWeeklyHealthSummaryReq {
+    string user_id = 1;
+}
+
+message GetWeeklyHealthSummaryRes {
+    string user_id = 1;
+    string summary = 2;
+}
+
+message Empty {}

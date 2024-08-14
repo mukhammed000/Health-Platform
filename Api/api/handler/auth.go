@@ -316,4 +316,3 @@ func (h *Handler) VerificationCode(c *gin.Context) {
 
 	c.JSON(http.StatusOK, res)
 }
-

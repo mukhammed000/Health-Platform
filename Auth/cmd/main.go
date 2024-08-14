@@ -1,6 +1,7 @@
 package main
 
 import (
+	"auth/config"
 	"auth/service"
 	"auth/storage/postgres"
 	"log"
@@ -12,14 +13,16 @@ import (
 )
 
 func main() {
+
+	cfg := config.Load()
+
 	stg, err := postgres.NewPostgresStorage()
 	if err != nil {
 		log.Fatalln("Error while connecting to database", err)
 	}
 	log.Println("Database connected successfully! ")
-	
 
-	lis, err := net.Listen("tcp", "localhost:8081")
+	lis, err := net.Listen("tcp", cfg.HTTPPort)
 	if err != nil {
 		log.Fatal("Error while creating TCP listener", err)
 	}
