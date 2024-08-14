@@ -17,6 +17,7 @@ func main() {
 		log.Fatalln("Error while connecting to database", err)
 	}
 	log.Println("Database connected successfully! ")
+	
 
 	lis, err := net.Listen("tcp", "localhost:8081")
 	if err != nil {
