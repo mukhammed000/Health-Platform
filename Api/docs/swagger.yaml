@@ -407,6 +407,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get daily health summary
       tags:
       - Health Monitoring
@@ -426,6 +428,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get real-time health monitoring data
       tags:
       - Health Monitoring
@@ -445,6 +449,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get weekly health summary
       tags:
       - Health Monitoring
@@ -475,6 +481,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Generate health recommendations
       tags:
       - Health Recommendations
@@ -500,6 +508,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get health recommendations by ID
       tags:
       - Health Recommendations
@@ -519,6 +529,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get all lifestyle data
       tags:
       - Life Style Data
@@ -548,6 +560,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Add new lifestyle data
       tags:
       - Life Style Data
@@ -577,6 +591,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Update lifestyle data
       tags:
       - Life Style Data
@@ -602,6 +618,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Delete lifestyle data
       tags:
       - Life Style Data
@@ -626,6 +644,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get lifestyle data by ID
       tags:
       - Life Style Data
@@ -656,6 +676,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Add new medical record
       tags:
       - Medical Records
@@ -685,6 +707,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Update a medical record
       tags:
       - Medical Records
@@ -710,6 +734,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Delete a medical record
       tags:
       - Medical Records
@@ -734,6 +760,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get medical record by ID
       tags:
       - Medical Records
@@ -753,6 +781,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get all medical records
       tags:
       - Medical Records
@@ -772,6 +802,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: List all medical records
       tags:
       - Medical Records
@@ -791,6 +823,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get all wearable data
       tags:
       - Wearable Data
@@ -820,6 +854,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Add new wearable data
       tags:
       - Wearable Data
@@ -849,6 +885,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Update wearable data
       tags:
       - Wearable Data
@@ -874,6 +912,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Delete wearable data
       tags:
       - Wearable Data
@@ -898,6 +938,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get wearable data by ID
       tags:
       - Wearable Data
@@ -1057,7 +1099,6 @@ paths:
           schema:
             type: string
       security:
-      - BearerAuth: []
       - BearerAuth: []
       summary: Validate an access token
       tags:

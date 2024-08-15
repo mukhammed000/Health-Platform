@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/analytics/health-monitoring/daily-summary": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve daily health summary data",
                 "consumes": [
                     "application/json"
@@ -46,6 +51,11 @@ const docTemplate = `{
         },
         "/analytics/health-monitoring/realtime": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve real-time health monitoring data",
                 "consumes": [
                     "application/json"
@@ -75,6 +85,11 @@ const docTemplate = `{
         },
         "/analytics/health-monitoring/weekly-summary": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve weekly health summary data",
                 "consumes": [
                     "application/json"
@@ -104,6 +119,11 @@ const docTemplate = `{
         },
         "/analytics/health-recommendations": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Generate health recommendations based on user data",
                 "consumes": [
                     "application/json"
@@ -150,6 +170,11 @@ const docTemplate = `{
         },
         "/analytics/health-recommendations/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve health recommendations by its ID",
                 "consumes": [
                     "application/json"
@@ -188,6 +213,11 @@ const docTemplate = `{
         },
         "/analytics/lifestyle-data": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve all lifestyle data",
                 "consumes": [
                     "application/json"
@@ -215,6 +245,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update existing lifestyle data",
                 "consumes": [
                     "application/json"
@@ -259,6 +294,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Add new lifestyle data for a user",
                 "consumes": [
                     "application/json"
@@ -305,6 +345,11 @@ const docTemplate = `{
         },
         "/analytics/lifestyle-data/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve lifestyle data by its ID",
                 "consumes": [
                     "application/json"
@@ -341,6 +386,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete lifestyle data by its ID",
                 "consumes": [
                     "application/json"
@@ -379,6 +429,11 @@ const docTemplate = `{
         },
         "/analytics/medical-record": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update an existing medical record",
                 "consumes": [
                     "application/json"
@@ -423,6 +478,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Add a new medical record for a user",
                 "consumes": [
                     "application/json"
@@ -469,6 +529,11 @@ const docTemplate = `{
         },
         "/analytics/medical-record/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve a medical record by its ID",
                 "consumes": [
                     "application/json"
@@ -505,6 +570,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete a medical record by its ID",
                 "consumes": [
                     "application/json"
@@ -543,6 +613,11 @@ const docTemplate = `{
         },
         "/analytics/medical-records": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve all medical records",
                 "consumes": [
                     "application/json"
@@ -572,6 +647,11 @@ const docTemplate = `{
         },
         "/analytics/medical-records/list": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "List all medical records with optional filters",
                 "consumes": [
                     "application/json"
@@ -601,6 +681,11 @@ const docTemplate = `{
         },
         "/analytics/wearable-data": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve all wearable data",
                 "consumes": [
                     "application/json"
@@ -628,6 +713,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update existing wearable data",
                 "consumes": [
                     "application/json"
@@ -672,6 +762,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Add new wearable data for a user",
                 "consumes": [
                     "application/json"
@@ -718,6 +813,11 @@ const docTemplate = `{
         },
         "/analytics/wearable-data/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieve wearable data by its ID",
                 "consumes": [
                     "application/json"
@@ -754,6 +854,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete wearable data by its ID",
                 "consumes": [
                     "application/json"
@@ -997,9 +1102,6 @@ const docTemplate = `{
         "/auth/validateToken": {
             "post": {
                 "security": [
-                    {
-                        "BearerAuth": []
-                    },
                     {
                         "BearerAuth": []
                     }

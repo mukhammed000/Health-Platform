@@ -13,6 +13,7 @@ import (
 // @Summary Add new medical record
 // @Description Add a new medical record for a user
 // @Tags Medical Records
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param body body analytics.AddMedicalRecordReq true "Medical record details"
@@ -40,6 +41,7 @@ func (h *Handler) AddMedicalRecord(c *gin.Context) {
 // @Summary Get all medical records
 // @Description Retrieve all medical records
 // @Tags Medical Records
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Success 200 {object} analytics.GetMedicalRecordsRes
@@ -60,6 +62,7 @@ func (h *Handler) GetMedicalRecords(c *gin.Context) {
 // @Summary Get medical record by ID
 // @Description Retrieve a medical record by its ID
 // @Tags Medical Records
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param id path string true "Medical record ID"
@@ -82,6 +85,7 @@ func (h *Handler) GetMedicalRecordById(c *gin.Context) {
 // @Summary Update a medical record
 // @Description Update an existing medical record
 // @Tags Medical Records
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param body body analytics.UpdateMedicalRecordReq true "Updated medical record details"
@@ -102,7 +106,6 @@ func (h *Handler) UpdateMedicalRecord(c *gin.Context) {
 		return
 	}
 
-
 	c.JSON(http.StatusOK, res)
 }
 
@@ -110,6 +113,7 @@ func (h *Handler) UpdateMedicalRecord(c *gin.Context) {
 // @Summary Delete a medical record
 // @Description Delete a medical record by its ID
 // @Tags Medical Records
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param id path string true "Medical record ID"
@@ -125,7 +129,6 @@ func (h *Handler) DeleteMedicalRecord(c *gin.Context) {
 		return
 	}
 
-
 	c.JSON(http.StatusOK, res)
 }
 
@@ -133,6 +136,7 @@ func (h *Handler) DeleteMedicalRecord(c *gin.Context) {
 // @Summary List all medical records
 // @Description List all medical records with optional filters
 // @Tags Medical Records
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Success 200 {object} analytics.ListMedicalRecordsRes
@@ -153,6 +157,7 @@ func (h *Handler) ListMedicalRecords(c *gin.Context) {
 // @Summary Add new lifestyle data
 // @Description Add new lifestyle data for a user
 // @Tags Life Style Data
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param body body analytics.AddLifestyleDataReq true "Lifestyle data details"
@@ -180,6 +185,7 @@ func (h *Handler) AddLifestyleData(c *gin.Context) {
 // @Summary Get all lifestyle data
 // @Description Retrieve all lifestyle data
 // @Tags Life Style Data
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Success 200 {object} analytics.GetLifestyleDataRes
@@ -200,6 +206,7 @@ func (h *Handler) GetLifestyleData(c *gin.Context) {
 // @Summary Get lifestyle data by ID
 // @Description Retrieve lifestyle data by its ID
 // @Tags Life Style Data
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param id path string true "Lifestyle data ID"
@@ -223,6 +230,7 @@ func (h *Handler) GetLifestyleDataById(c *gin.Context) {
 // @Summary Update lifestyle data
 // @Description Update existing lifestyle data
 // @Tags Life Style Data
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param body body analytics.UpdateLifestyleDataReq true "Updated lifestyle data details"
@@ -244,7 +252,6 @@ func (h *Handler) UpdateLifestyleData(c *gin.Context) {
 		return
 	}
 
-
 	c.JSON(http.StatusOK, res)
 }
 
@@ -252,6 +259,7 @@ func (h *Handler) UpdateLifestyleData(c *gin.Context) {
 // @Summary Delete lifestyle data
 // @Description Delete lifestyle data by its ID
 // @Tags Life Style Data
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param id path string true "Lifestyle data ID"
@@ -274,6 +282,7 @@ func (h *Handler) DeleteLifestyleData(c *gin.Context) {
 // @Summary Add new wearable data
 // @Description Add new wearable data for a user
 // @Tags Wearable Data
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param body body analytics.AddWearableDataReq true "Wearable data details"
@@ -301,6 +310,7 @@ func (h *Handler) AddWearableData(c *gin.Context) {
 // @Summary Get all wearable data
 // @Description Retrieve all wearable data
 // @Tags Wearable Data
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Success 200 {object} analytics.GetWearableDataRes
@@ -321,6 +331,7 @@ func (h *Handler) GetWearableData(c *gin.Context) {
 // @Summary Get wearable data by ID
 // @Description Retrieve wearable data by its ID
 // @Tags Wearable Data
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param id path string true "Wearable data ID"
@@ -343,6 +354,7 @@ func (h *Handler) GetWearableDataById(c *gin.Context) {
 // @Summary Update wearable data
 // @Description Update existing wearable data
 // @Tags Wearable Data
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param body body analytics.UpdateWearableDataReq true "Updated wearable data details"
@@ -370,6 +382,7 @@ func (h *Handler) UpdateWearableData(c *gin.Context) {
 // @Summary Delete wearable data
 // @Description Delete wearable data by its ID
 // @Tags Wearable Data
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param id path string true "Wearable data ID"
@@ -392,6 +405,7 @@ func (h *Handler) DeleteWearableData(c *gin.Context) {
 // @Summary Generate health recommendations
 // @Description Generate health recommendations based on user data
 // @Tags Health Recommendations
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param body body analytics.GenerateHealthRecommendationsReq true "Health data details"
@@ -419,6 +433,7 @@ func (h *Handler) GenerateHealthRecommendations(c *gin.Context) {
 // @Summary Get health recommendations by ID
 // @Description Retrieve health recommendations by its ID
 // @Tags Health Recommendations
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param id path string true "Recommendation ID"
@@ -442,6 +457,7 @@ func (h *Handler) GetHealthRecommendationsById(c *gin.Context) {
 // @Summary Get real-time health monitoring data
 // @Description Retrieve real-time health monitoring data
 // @Tags Health Monitoring
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Success 200 {object} analytics.GetRealtimeHealthMonitoringRes
@@ -462,6 +478,7 @@ func (h *Handler) GetRealtimeHealthMonitoring(c *gin.Context) {
 // @Summary Get daily health summary
 // @Description Retrieve daily health summary data
 // @Tags Health Monitoring
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Success 200 {object} analytics.GetDailyHealthSummaryRes
@@ -482,6 +499,7 @@ func (h *Handler) GetDailyHealthSummary(c *gin.Context) {
 // @Summary Get weekly health summary
 // @Description Retrieve weekly health summary data
 // @Tags Health Monitoring
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Success 200 {object} analytics.GetWeeklyHealthSummaryRes

@@ -90,7 +90,6 @@ func (h *Handler) Login(c *gin.Context) {
 // @Summary Validate an access token
 // @Description Validate a user's access token
 // @Security BearerAuth
-// @Security BearerAuth
 // @Tags Auth
 // @Accept json
 // @Produce json

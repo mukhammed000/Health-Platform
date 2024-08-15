@@ -2,10 +2,10 @@ package api
 
 import (
 	"api/api/handler"
-	// "api/api/middleware"
-	// "log"
+	"api/api/middleware"
+	"log"
 
-	// "github.com/casbin/casbin/v2"
+	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 
 	files "github.com/swaggo/files"
@@ -22,19 +22,19 @@ import (
 func NewGin(h *handler.Handler) *gin.Engine {
 	r := gin.Default()
 
-	// ca, err := casbin.NewEnforcer("config/model.conf", "config/policy.csv")
-	// if err != nil {
-	// 	panic(err)
-	// }
+	ca, err := casbin.NewEnforcer("config/model.conf", "config/policy.csv")
+	if err != nil {
+		panic(err)
+	}
 
-	// err = ca.LoadPolicy()
-	// if err != nil {
-	// 	log.Fatal("casbin error load policy: ", err)
-	// 	panic(err)
-	// }
+	err = ca.LoadPolicy()
+	if err != nil {
+		log.Fatal("casbin error load policy: ", err)
+		panic(err)
+	}
 
 	auth := r.Group("/auth")
-	// auth.Use(middleware.NewAuth(ca))
+	auth.Use(middleware.NewAuth(ca))
 	// Auth
 	{
 		auth.POST("/register", h.Register)
@@ -46,7 +46,7 @@ func NewGin(h *handler.Handler) *gin.Engine {
 	}
 
 	user := r.Group("/users")
-	// user.Use(middleware.NewAuth(ca))
+	user.Use(middleware.NewAuth(ca))
 	// Users
 	{
 		user.GET("/profile/:user_id", h.GetProfileInfo)
@@ -56,6 +56,7 @@ func NewGin(h *handler.Handler) *gin.Engine {
 	}
 
 	analytics := r.Group("/analytics")
+	// analytics.Use(middleware.NewAuth(ca))
 	{
 		// Medical Records
 		analytics.POST("/medical-record", h.AddMedicalRecord)

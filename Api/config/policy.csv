@@ -5,16 +5,41 @@ p, unauthorized, /swagger/favicon-32x32.png, GET
 p, unauthorized, /swagger/favicon-16x16.png, GET
 p, unauthorized, /swagger/swagger-ui-standalone-preset.js, GET
 p, unauthorized, /swagger/swagger/doc.json, GET
-p, unauthorized, /swagger/index.html, GET
 p, unauthorized, /favicon.ico, GET
-
-p, unauthorized, /auth/login, POST
-p, unauthorized, /auth/register, POST
-p, unauthorized, /auth/validateToken, POST
-p, unauthorized, /auth/refreshToken, POST
-p, unauthorized, /auth/validateEmail, POST
 
 p, user, /users/profile/:user_id, GET
 p, user, /users/deleteProfile/:user_id, DELETE
 p, user, /users/updateProfile, PUT
 p, user, /users/change-password, POST
+
+p, user, /auth/login, POST
+p, user, /auth/register, POST
+p, user, /auth/validateToken, POST
+p, user, /auth/refreshToken, POST
+p, user, /auth/validateEmail, POST
+
+p, user, /analytics/medical-record, POST
+p, user, /analytics/medical-records, GET
+p, user, /analytics/medical-record/:id, GET
+p, user, /analytics/medical-record, PUT
+p, user, /analytics/medical-record/:id, DELETE
+p, user, /analytics/medical-records/list, GET
+
+p, user, /analytics/lifestyle-data, POST
+p, user, /analytics/lifestyle-data, GET
+p, user, /analytics/lifestyle-data/:id, GET
+p, user, /analytics/lifestyle-data, PUT
+p, user, /analytics/lifestyle-data/:id, DELETE
+
+p, user, /analytics/wearable-data, POST
+p, user, /analytics/wearable-data, GET
+p, user, /analytics/wearable-data/:id, GET
+p, user, /analytics/wearable-data, PUT
+p, user, /analytics/wearable-data/:id, DELETE
+
+p, user, /analytics/health-recommendations, POST
+p, user, /analytics/health-recommendations/:id, GET
+
+p, user, /analytics/health-monitoring/realtime, GET
+p, user, /analytics/health-monitoring/daily-summary, GET
+p, user, /analytics/health-monitoring/weekly-summary, GET
