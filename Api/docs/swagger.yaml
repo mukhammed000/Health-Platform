@@ -551,6 +551,35 @@ paths:
       summary: Add new lifestyle data
       tags:
       - Life Style Data
+    put:
+      consumes:
+      - application/json
+      description: Update existing lifestyle data
+      parameters:
+      - description: Updated lifestyle data details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/analytics.UpdateLifestyleDataReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.Empty'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update lifestyle data
+      tags:
+      - Life Style Data
   /analytics/lifestyle-data/{id}:
     delete:
       consumes:
@@ -1066,36 +1095,6 @@ paths:
       summary: Verify a verification code
       tags:
       - Auth
-  /up_analytics/lifestyle-data:
-    put:
-      consumes:
-      - application/json
-      description: Update existing lifestyle data
-      parameters:
-      - description: Updated lifestyle data details
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/analytics.UpdateLifestyleDataReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/analytics.Empty'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Update lifestyle data
-      tags:
-      - Life Style Data
   /users/change-password:
     post:
       consumes:

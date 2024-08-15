@@ -102,6 +102,7 @@ func (h *Handler) UpdateMedicalRecord(c *gin.Context) {
 		return
 	}
 
+
 	c.JSON(http.StatusOK, res)
 }
 
@@ -123,6 +124,7 @@ func (h *Handler) DeleteMedicalRecord(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 
 	c.JSON(http.StatusOK, res)
 }
@@ -227,10 +229,10 @@ func (h *Handler) GetLifestyleDataById(c *gin.Context) {
 // @Success 200 {object} analytics.Empty
 // @Failure 400 {string} string "Bad Request"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /up_analytics/lifestyle-data [put]
+// @Router /analytics/lifestyle-data [put]
 func (h *Handler) UpdateLifestyleData(c *gin.Context) {
 	var req analytics.UpdateLifestyleDataReq
-	
+
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -241,6 +243,7 @@ func (h *Handler) UpdateLifestyleData(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 
 	c.JSON(http.StatusOK, res)
 }

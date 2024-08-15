@@ -214,6 +214,50 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "description": "Update existing lifestyle data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Life Style Data"
+                ],
+                "summary": "Update lifestyle data",
+                "parameters": [
+                    {
+                        "description": "Updated lifestyle data details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/analytics.UpdateLifestyleDataReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.Empty"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Add new lifestyle data for a user",
                 "consumes": [
@@ -1042,52 +1086,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Invalid or expired verification code",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/up_analytics/lifestyle-data": {
-            "put": {
-                "description": "Update existing lifestyle data",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Life Style Data"
-                ],
-                "summary": "Update lifestyle data",
-                "parameters": [
-                    {
-                        "description": "Updated lifestyle data details",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/analytics.UpdateLifestyleDataReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/analytics.Empty"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "schema": {
                             "type": "string"
                         }

@@ -158,12 +158,18 @@ func (s *AnalyticsStorage) UpdateMedicalRecord(req *pb.UpdateMedicalRecordReq) (
 		},
 	}
 
-	_, err := collection.UpdateOne(context.TODO(), filter, update)
+	result, err := collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
-		return nil, fmt.Errorf("failed to update medical record: %v", err)
+		return &pb.Empty{Text: "Failed to update medical record", IsDone: false}, fmt.Errorf("failed to update medical record: %v", err)
 	}
 
-	return &pb.Empty{}, nil
+	if result.MatchedCount == 0 {
+		return &pb.Empty{Text: "Record not found", IsDone: false}, nil
+	}
+
+	fmt.Println("--------------------->", result)
+
+	return &pb.Empty{Text: "Record updated successfully", IsDone: true}, nil
 }
 
 func (s *AnalyticsStorage) DeleteMedicalRecord(req *pb.DeleteMedicalRecordReq) (*pb.Empty, error) {
@@ -171,12 +177,16 @@ func (s *AnalyticsStorage) DeleteMedicalRecord(req *pb.DeleteMedicalRecordReq) (
 
 	filter := bson.M{"_id": req.Id}
 
-	_, err := collection.DeleteOne(context.TODO(), filter)
+	result, err := collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
-		return nil, fmt.Errorf("failed to delete medical record: %v", err)
+		return &pb.Empty{Text: "Failed to delete medical record", IsDone: false}, fmt.Errorf("failed to delete medical record: %v", err)
 	}
 
-	return &pb.Empty{}, nil
+	if result.DeletedCount == 0 {
+		return &pb.Empty{Text: "Medical record not found", IsDone: false}, nil
+	}
+
+	return &pb.Empty{IsDone: true, Text: "Medical record successfully deleted!"}, nil
 }
 
 func (s *AnalyticsStorage) ListMedicalRecords(req *pb.ListMedicalRecordsReq) (*pb.ListMedicalRecordsRes, error) {
@@ -364,24 +374,33 @@ func (s *AnalyticsStorage) UpdateLifestyleData(req *pb.UpdateLifestyleDataReq) (
 		},
 	}
 
-	_, err := collection.UpdateOne(context.TODO(), filter, update)
+	result, err := collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
-		return nil, fmt.Errorf("failed to update lifestyle data: %v", err)
+		return &pb.Empty{Text: "Failed to update lifestyle data", IsDone: false}, fmt.Errorf("failed to update lifestyle data: %v", err)
 	}
 
-	return &pb.Empty{}, nil
+	if result.MatchedCount == 0 {
+		return &pb.Empty{Text: "Lifestyle data not found", IsDone: false}, nil
+	}
+
+	return &pb.Empty{IsDone: true, Text: "Lifestyle data updated successfully!"}, nil
 }
+
 func (s *AnalyticsStorage) DeleteLifestyleData(req *pb.DeleteLifestyleDataReq) (*pb.Empty, error) {
 	collection := s.db.Collection("lifestyle_data")
 
 	filter := bson.M{"_id": req.Id}
 
-	_, err := collection.DeleteOne(context.TODO(), filter)
+	result, err := collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
-		return nil, fmt.Errorf("failed to delete lifestyle data: %v", err)
+		return &pb.Empty{Text: "Failed to delete lifestyle data", IsDone: false}, fmt.Errorf("failed to delete lifestyle data: %v", err)
 	}
 
-	return &pb.Empty{}, nil
+	if result.DeletedCount == 0 {
+		return &pb.Empty{Text: "Lifestyle data not found", IsDone: false}, nil
+	}
+
+	return &pb.Empty{IsDone: true, Text: "Lifestyle data deleted successfully!"}, nil
 }
 
 // Wearable Data
@@ -503,27 +522,35 @@ func (s *AnalyticsStorage) UpdateWearableData(req *pb.UpdateWearableDataReq) (*p
 		},
 	}
 
-	_, err := collection.UpdateOne(context.TODO(), filter, update)
+	result, err := collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
-		return nil, fmt.Errorf("failed to update wearable data: %v", err)
+		return &pb.Empty{Text: "Failed to update wearable data", IsDone: false}, fmt.Errorf("failed to update wearable data: %v", err)
 	}
 
-	return &pb.Empty{}, nil
+	if result.MatchedCount == 0 {
+		return &pb.Empty{Text: "Wearable data not found", IsDone: false}, nil
+	}
+
+	return &pb.Empty{IsDone: true, Text: "Wearable data is successfully updated!"}, nil
 }
 
 func (s *AnalyticsStorage) DeleteWearableData(req *pb.DeleteWearableDataReq) (*pb.Empty, error) {
 	collection := s.db.Collection("wearable_data")
 
-	// Construct the filter to find the document by id
 	filter := bson.M{"_id": req.Id}
 
-	_, err := collection.DeleteOne(context.TODO(), filter)
+	result, err := collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
-		return nil, fmt.Errorf("failed to delete wearable data: %v", err)
+		return &pb.Empty{Text: "Failed to delete wearable data", IsDone: false}, fmt.Errorf("failed to delete wearable data: %v", err)
 	}
 
-	return &pb.Empty{}, nil
+	if result.DeletedCount == 0 {
+		return &pb.Empty{Text: "Wearable data not found", IsDone: false}, nil
+	}
+
+	return &pb.Empty{IsDone: true, Text: "Wearable data successfully deleted"}, nil
 }
+
 
 func (s *AnalyticsStorage) GenerateHealthRecommendations(req *pb.GenerateHealthRecommendationsReq) (*pb.GenerateHealthRecommendationsRes, error) {
 

@@ -61,7 +61,7 @@ func NewGin(h *handler.Handler) *gin.Engine {
 		analytics.POST("/medical-record", h.AddMedicalRecord)
 		analytics.GET("/medical-records", h.GetMedicalRecords)
 		analytics.GET("/medical-record/:id", h.GetMedicalRecordById)
-		analytics.PUT("/medical-record/:id", h.UpdateMedicalRecord)
+		analytics.PUT("/medical-record", h.UpdateMedicalRecord)
 		analytics.DELETE("/medical-record/:id", h.DeleteMedicalRecord)
 		analytics.GET("/medical-records/list", h.ListMedicalRecords)
 
@@ -69,14 +69,14 @@ func NewGin(h *handler.Handler) *gin.Engine {
 		analytics.POST("/lifestyle-data", h.AddLifestyleData)
 		analytics.GET("/lifestyle-data", h.GetLifestyleData)
 		analytics.GET("/lifestyle-data/:id", h.GetLifestyleDataById)
-		analytics.PUT("/up_lifestyle-data/:id", h.UpdateLifestyleData)
+		analytics.PUT("/lifestyle-data", h.UpdateLifestyleData)
 		analytics.DELETE("/lifestyle-data/:id", h.DeleteLifestyleData)
 
 		// Wearable Data
 		analytics.POST("/wearable-data", h.AddWearableData)
 		analytics.GET("/wearable-data", h.GetWearableData)
 		analytics.GET("/wearable-data/:id", h.GetWearableDataById)
-		analytics.PUT("/wearable-data/:id", h.UpdateWearableData)
+		analytics.PUT("/wearable-data", h.UpdateWearableData)
 		analytics.DELETE("/wearable-data/:id", h.DeleteWearableData)
 
 		// Health Recommendations
