@@ -45,8 +45,6 @@ message AddMedicalRecordReq {
     string description = 5;
     string doctor_id = 6;
     repeated string attachments = 7;
-    string created_at = 8; // timestamp as string
-    string updated_at = 9; // timestamp as string
 }
 
 message AddMedicalRecordRes {
@@ -58,10 +56,10 @@ message AddMedicalRecordRes {
     string doctor_id = 6;
     repeated string attachments = 7;
     string created_at = 8; // timestamp as string
+    string updated_at = 9;
 }
 
 message GetMedicalRecordsByIdReq {
-    string user_id = 1;
     string record_id = 2;
 }
 
@@ -70,7 +68,6 @@ message GetMedicalRecordsByIdRes {
 }
 
 message GetMedicalRecordsReq {
-    string user_id = 1;
 }
 
 message GetMedicalRecordsRes {
@@ -85,16 +82,13 @@ message UpdateMedicalRecordReq {
     string description = 5;
     string doctor_id = 6;
     repeated string attachments = 7;
-    string updated_at = 8; // timestamp as string
 }
 
 message DeleteMedicalRecordReq {
     string id = 1;
-    string user_id = 2;
 }
 
 message ListMedicalRecordsReq {
-    string user_id = 1;
 }
 
 message ListMedicalRecordsRes {
@@ -108,8 +102,6 @@ message AddLifestyleDataReq {
     string data_type = 3;
     string data_value = 4;
     string recorded_date = 5; // timestamp as string
-    string created_at = 6; // timestamp as string
-    string updated_at = 7; // timestamp as string
 }
 
 message AddLifestyleDataRes {
@@ -119,10 +111,10 @@ message AddLifestyleDataRes {
     string data_value = 4;
     string recorded_date = 5; // timestamp as string
     string created_at = 6; // timestamp as string
+    string updated_at = 7;
 }
 
 message GetLifestyleDataReq {
-    string user_id = 1;
 }
 
 message GetLifestyleDataRes {
@@ -144,12 +136,10 @@ message UpdateLifestyleDataReq {
     string data_type = 3;
     string data_value = 4;
     string recorded_date = 5; // timestamp as string
-    string updated_at = 6; // timestamp as string
 }
 
 message DeleteLifestyleDataReq {
     string id = 1;
-    string user_id = 2;
 }
 
 // Wearable Data
@@ -160,8 +150,6 @@ message AddWearableDataReq {
     string data_type = 4;
     string data_value = 5;
     string recorded_timestamp = 6; // timestamp as string
-    string created_at = 7; // timestamp as string
-    string updated_at = 8; // timestamp as string
 }
 
 message AddWearableDataRes {
@@ -175,7 +163,7 @@ message AddWearableDataRes {
 }
 
 message GetWearableDataReq {
-    string user_id = 1;
+
 }
 
 message GetWearableDataRes {
@@ -183,8 +171,7 @@ message GetWearableDataRes {
 }
 
 message GetWearableDataByIdReq {
-    string user_id = 1;
-    string data_id = 2;
+    string data_id = 1;
 }
 
 message GetWearableDataByIdRes {
@@ -198,12 +185,10 @@ message UpdateWearableDataReq {
     string data_type = 4;
     string data_value = 5;
     string recorded_timestamp = 6; // timestamp as string
-    string updated_at = 7; // timestamp as string
 }
 
 message DeleteWearableDataReq {
     string id = 1;
-    string user_id = 2;
 }
 
 // Health Recommendations
@@ -211,9 +196,6 @@ message GenerateHealthRecommendationsReq {
     string user_id = 1;
     string recommendation_type = 2;
     string description = 3;
-    int32 priority = 4;
-    string created_at = 5; // timestamp as string
-    string updated_at = 6; // timestamp as string
 }
 
 message GenerateHealthRecommendationsRes {
@@ -221,9 +203,8 @@ message GenerateHealthRecommendationsRes {
     string user_id = 2;
     string recommendation_type = 3;
     string description = 4;
-    int32 priority = 5;
-    string created_at = 6; // timestamp as string
-    string updated_at = 7; // timestamp as string
+    string created_at = 5; 
+    string updated_at = 7; 
 }
 
 message GetHealthRecommendationsByIdReq {
@@ -263,4 +244,7 @@ message GetWeeklyHealthSummaryRes {
     string summary = 2;
 }
 
-message Empty {}
+message Empty {
+    string text = 1;
+    bool isDone = 2;
+}

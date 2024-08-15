@@ -1,5 +1,271 @@
 basePath: /
 definitions:
+  analytics.AddLifestyleDataReq:
+    properties:
+      data_type:
+        type: string
+      data_value:
+        type: string
+      id:
+        type: string
+      recorded_date:
+        description: timestamp as string
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.AddLifestyleDataRes:
+    properties:
+      created_at:
+        description: timestamp as string
+        type: string
+      data_type:
+        type: string
+      data_value:
+        type: string
+      id:
+        type: string
+      recorded_date:
+        description: timestamp as string
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.AddMedicalRecordReq:
+    properties:
+      attachments:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      doctor_id:
+        type: string
+      id:
+        type: string
+      record_date:
+        description: timestamp as string
+        type: string
+      record_type:
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.AddMedicalRecordRes:
+    properties:
+      attachments:
+        items:
+          type: string
+        type: array
+      created_at:
+        description: timestamp as string
+        type: string
+      description:
+        type: string
+      doctor_id:
+        type: string
+      id:
+        type: string
+      record_date:
+        description: timestamp as string
+        type: string
+      record_type:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.AddWearableDataReq:
+    properties:
+      data_type:
+        type: string
+      data_value:
+        type: string
+      device_type:
+        type: string
+      id:
+        type: string
+      recorded_timestamp:
+        description: timestamp as string
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.AddWearableDataRes:
+    properties:
+      created_at:
+        description: timestamp as string
+        type: string
+      data_type:
+        type: string
+      data_value:
+        type: string
+      device_type:
+        type: string
+      id:
+        type: string
+      recorded_timestamp:
+        description: timestamp as string
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.Empty:
+    properties:
+      isDone:
+        type: boolean
+      text:
+        type: string
+    type: object
+  analytics.GenerateHealthRecommendationsReq:
+    properties:
+      description:
+        type: string
+      recommendation_type:
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.GenerateHealthRecommendationsRes:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      recommendation_type:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.GetDailyHealthSummaryRes:
+    properties:
+      summary:
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.GetHealthRecommendationsByIdRes:
+    properties:
+      info:
+        $ref: '#/definitions/analytics.GenerateHealthRecommendationsRes'
+    type: object
+  analytics.GetLifestyleDataByIdRes:
+    properties:
+      info:
+        $ref: '#/definitions/analytics.AddLifestyleDataRes'
+    type: object
+  analytics.GetLifestyleDataRes:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/analytics.AddLifestyleDataRes'
+        type: array
+    type: object
+  analytics.GetMedicalRecordsByIdRes:
+    properties:
+      info:
+        $ref: '#/definitions/analytics.AddMedicalRecordRes'
+    type: object
+  analytics.GetMedicalRecordsRes:
+    properties:
+      records:
+        items:
+          $ref: '#/definitions/analytics.AddMedicalRecordRes'
+        type: array
+    type: object
+  analytics.GetRealtimeHealthMonitoringRes:
+    properties:
+      monitoring_data:
+        additionalProperties:
+          type: string
+        description: key-value pairs for monitoring data
+        type: object
+      user_id:
+        type: string
+    type: object
+  analytics.GetWearableDataByIdRes:
+    properties:
+      info:
+        $ref: '#/definitions/analytics.AddWearableDataRes'
+    type: object
+  analytics.GetWearableDataRes:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/analytics.AddWearableDataRes'
+        type: array
+    type: object
+  analytics.GetWeeklyHealthSummaryRes:
+    properties:
+      summary:
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.ListMedicalRecordsRes:
+    properties:
+      records:
+        items:
+          $ref: '#/definitions/analytics.AddMedicalRecordRes'
+        type: array
+    type: object
+  analytics.UpdateLifestyleDataReq:
+    properties:
+      data_type:
+        type: string
+      data_value:
+        type: string
+      id:
+        type: string
+      recorded_date:
+        description: timestamp as string
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.UpdateMedicalRecordReq:
+    properties:
+      attachments:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      doctor_id:
+        type: string
+      id:
+        type: string
+      record_date:
+        description: timestamp as string
+        type: string
+      record_type:
+        type: string
+      user_id:
+        type: string
+    type: object
+  analytics.UpdateWearableDataReq:
+    properties:
+      data_type:
+        type: string
+      data_value:
+        type: string
+      device_type:
+        type: string
+      id:
+        type: string
+      recorded_timestamp:
+        description: timestamp as string
+        type: string
+      user_id:
+        type: string
+    type: object
   users.ChangePasswordReq:
     properties:
       current_password:
@@ -125,6 +391,487 @@ info:
   title: Voting service
   version: "1.0"
 paths:
+  /analytics/health-monitoring/daily-summary:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve daily health summary data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.GetDailyHealthSummaryRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get daily health summary
+      tags:
+      - Health Monitoring
+  /analytics/health-monitoring/realtime:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve real-time health monitoring data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.GetRealtimeHealthMonitoringRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get real-time health monitoring data
+      tags:
+      - Health Monitoring
+  /analytics/health-monitoring/weekly-summary:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve weekly health summary data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.GetWeeklyHealthSummaryRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get weekly health summary
+      tags:
+      - Health Monitoring
+  /analytics/health-recommendations:
+    post:
+      consumes:
+      - application/json
+      description: Generate health recommendations based on user data
+      parameters:
+      - description: Health data details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/analytics.GenerateHealthRecommendationsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.GenerateHealthRecommendationsRes'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Generate health recommendations
+      tags:
+      - Health Recommendations
+  /analytics/health-recommendations/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve health recommendations by its ID
+      parameters:
+      - description: Recommendation ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.GetHealthRecommendationsByIdRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get health recommendations by ID
+      tags:
+      - Health Recommendations
+  /analytics/lifestyle-data:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all lifestyle data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.GetLifestyleDataRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all lifestyle data
+      tags:
+      - Life Style Data
+    post:
+      consumes:
+      - application/json
+      description: Add new lifestyle data for a user
+      parameters:
+      - description: Lifestyle data details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/analytics.AddLifestyleDataReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.AddLifestyleDataRes'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add new lifestyle data
+      tags:
+      - Life Style Data
+  /analytics/lifestyle-data/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete lifestyle data by its ID
+      parameters:
+      - description: Lifestyle data ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.Empty'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete lifestyle data
+      tags:
+      - Life Style Data
+    get:
+      consumes:
+      - application/json
+      description: Retrieve lifestyle data by its ID
+      parameters:
+      - description: Lifestyle data ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.GetLifestyleDataByIdRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get lifestyle data by ID
+      tags:
+      - Life Style Data
+  /analytics/medical-record:
+    post:
+      consumes:
+      - application/json
+      description: Add a new medical record for a user
+      parameters:
+      - description: Medical record details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/analytics.AddMedicalRecordReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.AddMedicalRecordRes'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add new medical record
+      tags:
+      - Medical Records
+    put:
+      consumes:
+      - application/json
+      description: Update an existing medical record
+      parameters:
+      - description: Updated medical record details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/analytics.UpdateMedicalRecordReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.Empty'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update a medical record
+      tags:
+      - Medical Records
+  /analytics/medical-record/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a medical record by its ID
+      parameters:
+      - description: Medical record ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.Empty'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete a medical record
+      tags:
+      - Medical Records
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a medical record by its ID
+      parameters:
+      - description: Medical record ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.GetMedicalRecordsByIdRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get medical record by ID
+      tags:
+      - Medical Records
+  /analytics/medical-records:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all medical records
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.GetMedicalRecordsRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all medical records
+      tags:
+      - Medical Records
+  /analytics/medical-records/list:
+    get:
+      consumes:
+      - application/json
+      description: List all medical records with optional filters
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.ListMedicalRecordsRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: List all medical records
+      tags:
+      - Medical Records
+  /analytics/wearable-data:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all wearable data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.GetWearableDataRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all wearable data
+      tags:
+      - Wearable Data
+    post:
+      consumes:
+      - application/json
+      description: Add new wearable data for a user
+      parameters:
+      - description: Wearable data details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/analytics.AddWearableDataReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.AddWearableDataRes'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add new wearable data
+      tags:
+      - Wearable Data
+    put:
+      consumes:
+      - application/json
+      description: Update existing wearable data
+      parameters:
+      - description: Updated wearable data details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/analytics.UpdateWearableDataReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.Empty'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update wearable data
+      tags:
+      - Wearable Data
+  /analytics/wearable-data/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete wearable data by its ID
+      parameters:
+      - description: Wearable data ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.Empty'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete wearable data
+      tags:
+      - Wearable Data
+    get:
+      consumes:
+      - application/json
+      description: Retrieve wearable data by its ID
+      parameters:
+      - description: Wearable data ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.GetWearableDataByIdRes'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get wearable data by ID
+      tags:
+      - Wearable Data
   /auth/login:
     post:
       consumes:
@@ -319,6 +1066,36 @@ paths:
       summary: Verify a verification code
       tags:
       - Auth
+  /up_analytics/lifestyle-data:
+    put:
+      consumes:
+      - application/json
+      description: Update existing lifestyle data
+      parameters:
+      - description: Updated lifestyle data details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/analytics.UpdateLifestyleDataReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/analytics.Empty'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update lifestyle data
+      tags:
+      - Life Style Data
   /users/change-password:
     post:
       consumes:

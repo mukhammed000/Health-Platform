@@ -15,6 +15,737 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/analytics/health-monitoring/daily-summary": {
+            "get": {
+                "description": "Retrieve daily health summary data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Health Monitoring"
+                ],
+                "summary": "Get daily health summary",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GetDailyHealthSummaryRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/health-monitoring/realtime": {
+            "get": {
+                "description": "Retrieve real-time health monitoring data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Health Monitoring"
+                ],
+                "summary": "Get real-time health monitoring data",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GetRealtimeHealthMonitoringRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/health-monitoring/weekly-summary": {
+            "get": {
+                "description": "Retrieve weekly health summary data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Health Monitoring"
+                ],
+                "summary": "Get weekly health summary",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GetWeeklyHealthSummaryRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/health-recommendations": {
+            "post": {
+                "description": "Generate health recommendations based on user data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Health Recommendations"
+                ],
+                "summary": "Generate health recommendations",
+                "parameters": [
+                    {
+                        "description": "Health data details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GenerateHealthRecommendationsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GenerateHealthRecommendationsRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/health-recommendations/{id}": {
+            "get": {
+                "description": "Retrieve health recommendations by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Health Recommendations"
+                ],
+                "summary": "Get health recommendations by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Recommendation ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GetHealthRecommendationsByIdRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/lifestyle-data": {
+            "get": {
+                "description": "Retrieve all lifestyle data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Life Style Data"
+                ],
+                "summary": "Get all lifestyle data",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GetLifestyleDataRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add new lifestyle data for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Life Style Data"
+                ],
+                "summary": "Add new lifestyle data",
+                "parameters": [
+                    {
+                        "description": "Lifestyle data details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/analytics.AddLifestyleDataReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.AddLifestyleDataRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/lifestyle-data/{id}": {
+            "get": {
+                "description": "Retrieve lifestyle data by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Life Style Data"
+                ],
+                "summary": "Get lifestyle data by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Lifestyle data ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GetLifestyleDataByIdRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete lifestyle data by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Life Style Data"
+                ],
+                "summary": "Delete lifestyle data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Lifestyle data ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.Empty"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/medical-record": {
+            "put": {
+                "description": "Update an existing medical record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Medical Records"
+                ],
+                "summary": "Update a medical record",
+                "parameters": [
+                    {
+                        "description": "Updated medical record details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/analytics.UpdateMedicalRecordReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.Empty"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add a new medical record for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Medical Records"
+                ],
+                "summary": "Add new medical record",
+                "parameters": [
+                    {
+                        "description": "Medical record details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/analytics.AddMedicalRecordReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.AddMedicalRecordRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/medical-record/{id}": {
+            "get": {
+                "description": "Retrieve a medical record by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Medical Records"
+                ],
+                "summary": "Get medical record by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Medical record ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GetMedicalRecordsByIdRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a medical record by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Medical Records"
+                ],
+                "summary": "Delete a medical record",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Medical record ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.Empty"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/medical-records": {
+            "get": {
+                "description": "Retrieve all medical records",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Medical Records"
+                ],
+                "summary": "Get all medical records",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GetMedicalRecordsRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/medical-records/list": {
+            "get": {
+                "description": "List all medical records with optional filters",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Medical Records"
+                ],
+                "summary": "List all medical records",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.ListMedicalRecordsRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/wearable-data": {
+            "get": {
+                "description": "Retrieve all wearable data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wearable Data"
+                ],
+                "summary": "Get all wearable data",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GetWearableDataRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update existing wearable data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wearable Data"
+                ],
+                "summary": "Update wearable data",
+                "parameters": [
+                    {
+                        "description": "Updated wearable data details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/analytics.UpdateWearableDataReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.Empty"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add new wearable data for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wearable Data"
+                ],
+                "summary": "Add new wearable data",
+                "parameters": [
+                    {
+                        "description": "Wearable data details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/analytics.AddWearableDataReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.AddWearableDataRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/analytics/wearable-data/{id}": {
+            "get": {
+                "description": "Retrieve wearable data by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wearable Data"
+                ],
+                "summary": "Get wearable data by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Wearable data ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.GetWearableDataByIdRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete wearable data by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Wearable Data"
+                ],
+                "summary": "Delete wearable data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Wearable data ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.Empty"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "security": [
@@ -324,6 +1055,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/up_analytics/lifestyle-data": {
+            "put": {
+                "description": "Update existing lifestyle data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Life Style Data"
+                ],
+                "summary": "Update lifestyle data",
+                "parameters": [
+                    {
+                        "description": "Updated lifestyle data details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/analytics.UpdateLifestyleDataReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/analytics.Empty"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/users/change-password": {
             "post": {
                 "security": [
@@ -517,6 +1294,410 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "analytics.AddLifestyleDataReq": {
+            "type": "object",
+            "properties": {
+                "data_type": {
+                    "type": "string"
+                },
+                "data_value": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "recorded_date": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.AddLifestyleDataRes": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "data_type": {
+                    "type": "string"
+                },
+                "data_value": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "recorded_date": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.AddMedicalRecordReq": {
+            "type": "object",
+            "properties": {
+                "attachments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "doctor_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "record_date": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "record_type": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.AddMedicalRecordRes": {
+            "type": "object",
+            "properties": {
+                "attachments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "created_at": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "doctor_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "record_date": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "record_type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.AddWearableDataReq": {
+            "type": "object",
+            "properties": {
+                "data_type": {
+                    "type": "string"
+                },
+                "data_value": {
+                    "type": "string"
+                },
+                "device_type": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "recorded_timestamp": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.AddWearableDataRes": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "data_type": {
+                    "type": "string"
+                },
+                "data_value": {
+                    "type": "string"
+                },
+                "device_type": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "recorded_timestamp": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.Empty": {
+            "type": "object",
+            "properties": {
+                "isDone": {
+                    "type": "boolean"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.GenerateHealthRecommendationsReq": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "recommendation_type": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.GenerateHealthRecommendationsRes": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "recommendation_type": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.GetDailyHealthSummaryRes": {
+            "type": "object",
+            "properties": {
+                "summary": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.GetHealthRecommendationsByIdRes": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/analytics.GenerateHealthRecommendationsRes"
+                }
+            }
+        },
+        "analytics.GetLifestyleDataByIdRes": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/analytics.AddLifestyleDataRes"
+                }
+            }
+        },
+        "analytics.GetLifestyleDataRes": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/analytics.AddLifestyleDataRes"
+                    }
+                }
+            }
+        },
+        "analytics.GetMedicalRecordsByIdRes": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/analytics.AddMedicalRecordRes"
+                }
+            }
+        },
+        "analytics.GetMedicalRecordsRes": {
+            "type": "object",
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/analytics.AddMedicalRecordRes"
+                    }
+                }
+            }
+        },
+        "analytics.GetRealtimeHealthMonitoringRes": {
+            "type": "object",
+            "properties": {
+                "monitoring_data": {
+                    "description": "key-value pairs for monitoring data",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.GetWearableDataByIdRes": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/analytics.AddWearableDataRes"
+                }
+            }
+        },
+        "analytics.GetWearableDataRes": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/analytics.AddWearableDataRes"
+                    }
+                }
+            }
+        },
+        "analytics.GetWeeklyHealthSummaryRes": {
+            "type": "object",
+            "properties": {
+                "summary": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.ListMedicalRecordsRes": {
+            "type": "object",
+            "properties": {
+                "records": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/analytics.AddMedicalRecordRes"
+                    }
+                }
+            }
+        },
+        "analytics.UpdateLifestyleDataReq": {
+            "type": "object",
+            "properties": {
+                "data_type": {
+                    "type": "string"
+                },
+                "data_value": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "recorded_date": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.UpdateMedicalRecordReq": {
+            "type": "object",
+            "properties": {
+                "attachments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "doctor_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "record_date": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "record_type": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "analytics.UpdateWearableDataReq": {
+            "type": "object",
+            "properties": {
+                "data_type": {
+                    "type": "string"
+                },
+                "data_value": {
+                    "type": "string"
+                },
+                "device_type": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "recorded_timestamp": {
+                    "description": "timestamp as string",
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "users.ChangePasswordReq": {
             "type": "object",
             "properties": {

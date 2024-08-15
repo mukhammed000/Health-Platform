@@ -31,7 +31,7 @@ func NewMongoStorage() (u.InitRoot, error) {
 		log.Fatal("Error: Couldn't connect to the database.", err)
 	}
 
-	db := client.Database("lerning")
+	db := client.Database("Analytics")
 
 	return &Storage{Db: db}, err
 }

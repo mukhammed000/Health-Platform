@@ -2,10 +2,14 @@ package mongo
 
 import (
 	pb "analytics/genproto/analytics"
+	ai "analytics/storage/Ai"
 	"context"
 	"fmt"
+	"log"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -29,8 +33,8 @@ func (s *AnalyticsStorage) AddMedicalRecord(req *pb.AddMedicalRecordReq) (*pb.Ad
 		"description": req.Description,
 		"doctor_id":   req.DoctorId,
 		"attachments": req.Attachments,
-		"created_at":  req.CreatedAt,
-		"updated_at":  req.UpdatedAt,
+		"created_at":  time.Now().String(),
+		"updated_at":  time.Now().String(),
 	}
 
 	_, err := collection.InsertOne(context.TODO(), record)
@@ -46,7 +50,8 @@ func (s *AnalyticsStorage) AddMedicalRecord(req *pb.AddMedicalRecordReq) (*pb.Ad
 		Description: req.Description,
 		DoctorId:    req.DoctorId,
 		Attachments: req.Attachments,
-		CreatedAt:   req.CreatedAt,
+		CreatedAt:   time.Now().String(),
+		UpdatedAt:   time.Now().String(),
 	}
 
 	return res, nil
@@ -55,7 +60,7 @@ func (s *AnalyticsStorage) AddMedicalRecord(req *pb.AddMedicalRecordReq) (*pb.Ad
 func (s *AnalyticsStorage) GetMedicalRecord(req *pb.GetMedicalRecordsReq) (*pb.GetMedicalRecordsRes, error) {
 	collection := s.db.Collection("medical_records")
 
-	filter := bson.M{"user_id": req.UserId}
+	filter := bson.M{}
 
 	cursor, err := collection.Find(context.TODO(), filter)
 	if err != nil {
@@ -80,6 +85,7 @@ func (s *AnalyticsStorage) GetMedicalRecord(req *pb.GetMedicalRecordsReq) (*pb.G
 			DoctorId:    record["doctor_id"].(string),
 			Attachments: toStringSlice(record["attachments"].([]interface{})),
 			CreatedAt:   record["created_at"].(string),
+			UpdatedAt:   record["updated_at"].(string),
 		})
 	}
 
@@ -107,7 +113,7 @@ func toStringSlice(interfaces []interface{}) []string {
 func (s *AnalyticsStorage) GetMedicalRecordsById(req *pb.GetMedicalRecordsByIdReq) (*pb.GetMedicalRecordsByIdRes, error) {
 	collection := s.db.Collection("medical_records")
 
-	filter := bson.M{"user_id": req.UserId, "_id": req.RecordId}
+	filter := bson.M{"_id": req.RecordId}
 
 	var record bson.M
 	err := collection.FindOne(context.TODO(), filter).Decode(&record)
@@ -128,6 +134,7 @@ func (s *AnalyticsStorage) GetMedicalRecordsById(req *pb.GetMedicalRecordsByIdRe
 			DoctorId:    record["doctor_id"].(string),
 			Attachments: toStringSlice(record["attachments"].([]interface{})),
 			CreatedAt:   record["created_at"].(string),
+			UpdatedAt:   record["updated_at"].(string),
 		},
 	}
 
@@ -147,7 +154,7 @@ func (s *AnalyticsStorage) UpdateMedicalRecord(req *pb.UpdateMedicalRecordReq) (
 			"description": req.Description,
 			"doctor_id":   req.DoctorId,
 			"attachments": req.Attachments,
-			"updated_at":  req.UpdatedAt,
+			"updated_at":  time.Now().String(),
 		},
 	}
 
@@ -162,7 +169,7 @@ func (s *AnalyticsStorage) UpdateMedicalRecord(req *pb.UpdateMedicalRecordReq) (
 func (s *AnalyticsStorage) DeleteMedicalRecord(req *pb.DeleteMedicalRecordReq) (*pb.Empty, error) {
 	collection := s.db.Collection("medical_records")
 
-	filter := bson.M{"_id": req.Id, "user_id": req.UserId}
+	filter := bson.M{"_id": req.Id}
 
 	_, err := collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
@@ -175,7 +182,8 @@ func (s *AnalyticsStorage) DeleteMedicalRecord(req *pb.DeleteMedicalRecordReq) (
 func (s *AnalyticsStorage) ListMedicalRecords(req *pb.ListMedicalRecordsReq) (*pb.ListMedicalRecordsRes, error) {
 	collection := s.db.Collection("medical_records")
 
-	filter := bson.M{"user_id": req.UserId}
+	// Filter is empty to list all medical records
+	filter := bson.M{}
 
 	cursor, err := collection.Find(context.TODO(), filter)
 	if err != nil {
@@ -200,6 +208,7 @@ func (s *AnalyticsStorage) ListMedicalRecords(req *pb.ListMedicalRecordsReq) (*p
 			DoctorId:    record["doctor_id"].(string),
 			Attachments: toStringSlice(record["attachments"].([]interface{})),
 			CreatedAt:   record["created_at"].(string),
+			UpdatedAt:   record["updated_at"].(string),
 		})
 	}
 
@@ -222,8 +231,8 @@ func (s *AnalyticsStorage) AddLifestyleData(req *pb.AddLifestyleDataReq) (*pb.Ad
 		"data_type":     req.DataType,
 		"data_value":    req.DataValue,
 		"recorded_date": req.RecordedDate,
-		"created_at":    req.CreatedAt,
-		"updated_at":    req.UpdatedAt,
+		"created_at":    time.Now().String(),
+		"updated_at":    time.Now().String(),
 	}
 
 	_, err := collection.InsertOne(context.TODO(), data)
@@ -237,7 +246,7 @@ func (s *AnalyticsStorage) AddLifestyleData(req *pb.AddLifestyleDataReq) (*pb.Ad
 		DataType:     req.DataType,
 		DataValue:    req.DataValue,
 		RecordedDate: req.RecordedDate,
-		CreatedAt:    req.CreatedAt,
+		CreatedAt:    time.Now().String(),
 	}
 
 	return res, nil
@@ -246,9 +255,8 @@ func (s *AnalyticsStorage) AddLifestyleData(req *pb.AddLifestyleDataReq) (*pb.Ad
 func (s *AnalyticsStorage) GetLifestyleData(req *pb.GetLifestyleDataReq) (*pb.GetLifestyleDataRes, error) {
 	collection := s.db.Collection("lifestyle_data")
 
-	filter := bson.M{"user_id": req.UserId}
-
-	cursor, err := collection.Find(context.TODO(), filter)
+	// No filter is applied; fetching all documents from the collection
+	cursor, err := collection.Find(context.TODO(), bson.M{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to find lifestyle data: %v", err)
 	}
@@ -262,13 +270,30 @@ func (s *AnalyticsStorage) GetLifestyleData(req *pb.GetLifestyleDataReq) (*pb.Ge
 			return nil, fmt.Errorf("failed to decode lifestyle data: %v", err)
 		}
 
+		// Extract and handle _id field
+		id, ok := record["_id"].(string) // Check if _id is stored as a string
+		if !ok {
+			if objectID, ok := record["_id"].(primitive.ObjectID); ok {
+				id = objectID.Hex() // Convert ObjectID to string
+			} else {
+				return nil, fmt.Errorf("failed to convert _id to string or ObjectID")
+			}
+		}
+
+		// Extract other fields with default values if not present
+		userID, _ := record["user_id"].(string)
+		dataType, _ := record["data_type"].(string)
+		dataValue, _ := record["data_value"].(string)
+		recordedDate, _ := record["recorded_date"].(string)
+		createdAt, _ := record["created_at"].(string)
+
 		data = append(data, &pb.AddLifestyleDataRes{
-			Id:           record["_id"].(string),
-			UserId:       record["user_id"].(string),
-			DataType:     record["data_type"].(string),
-			DataValue:    record["data_value"].(string),
-			RecordedDate: record["recorded_date"].(string),
-			CreatedAt:    record["created_at"].(string),
+			Id:           id,
+			UserId:       userID,
+			DataType:     dataType,
+			DataValue:    dataValue,
+			RecordedDate: recordedDate,
+			CreatedAt:    createdAt,
 		})
 	}
 
@@ -284,7 +309,8 @@ func (s *AnalyticsStorage) GetLifestyleData(req *pb.GetLifestyleDataReq) (*pb.Ge
 func (s *AnalyticsStorage) GetLifestyleDataById(req *pb.GetLifestyleDataByIdReq) (*pb.GetLifestyleDataByIdRes, error) {
 	collection := s.db.Collection("lifestyle_data")
 
-	filter := bson.M{"user_id": req.UserId, "_id": req.DataId}
+	// Filter by the "_id" field
+	filter := bson.M{"_id": req.DataId}
 
 	var record bson.M
 	err := collection.FindOne(context.TODO(), filter).Decode(&record)
@@ -295,14 +321,29 @@ func (s *AnalyticsStorage) GetLifestyleDataById(req *pb.GetLifestyleDataByIdReq)
 		return nil, fmt.Errorf("failed to find lifestyle data: %v", err)
 	}
 
+	// Extract fields from the record
+	id, ok := record["_id"].(string)
+	if !ok {
+		id = ""
+	}
+
+	createdAt, _ := record["created_at"].(string)
+	updatedAt, _ := record["updated_at"].(string)
+	recordedDate, _ := record["recorded_date"].(string)
+	userID, _ := record["user_id"].(string)
+	dataType, _ := record["data_type"].(string)
+	dataValue, _ := record["data_value"].(string)
+
+	// Create the response object
 	res := &pb.GetLifestyleDataByIdRes{
 		Info: &pb.AddLifestyleDataRes{
-			Id:           record["_id"].(string),
-			UserId:       record["user_id"].(string),
-			DataType:     record["data_type"].(string),
-			DataValue:    record["data_value"].(string),
-			RecordedDate: record["recorded_date"].(string),
-			CreatedAt:    record["created_at"].(string),
+			Id:           id,
+			UserId:       userID,
+			DataType:     dataType,
+			DataValue:    dataValue,
+			RecordedDate: recordedDate,
+			CreatedAt:    createdAt,
+			UpdatedAt:    updatedAt,
 		},
 	}
 
@@ -319,7 +360,7 @@ func (s *AnalyticsStorage) UpdateLifestyleData(req *pb.UpdateLifestyleDataReq) (
 			"data_type":     req.DataType,
 			"data_value":    req.DataValue,
 			"recorded_date": req.RecordedDate,
-			"updated_at":    req.UpdatedAt,
+			"updated_at":    time.Now().String(),
 		},
 	}
 
@@ -330,11 +371,10 @@ func (s *AnalyticsStorage) UpdateLifestyleData(req *pb.UpdateLifestyleDataReq) (
 
 	return &pb.Empty{}, nil
 }
-
 func (s *AnalyticsStorage) DeleteLifestyleData(req *pb.DeleteLifestyleDataReq) (*pb.Empty, error) {
 	collection := s.db.Collection("lifestyle_data")
 
-	filter := bson.M{"_id": req.Id, "user_id": req.UserId}
+	filter := bson.M{"_id": req.Id}
 
 	_, err := collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
@@ -355,8 +395,8 @@ func (s *AnalyticsStorage) AddWearableData(req *pb.AddWearableDataReq) (*pb.AddW
 		"data_type":          req.DataType,
 		"data_value":         req.DataValue,
 		"recorded_timestamp": req.RecordedTimestamp,
-		"created_at":         req.CreatedAt,
-		"updated_at":         req.UpdatedAt,
+		"created_at":         time.Now().String(),
+		"updated_at":         time.Now().String(),
 	}
 
 	_, err := collection.InsertOne(context.TODO(), data)
@@ -371,7 +411,7 @@ func (s *AnalyticsStorage) AddWearableData(req *pb.AddWearableDataReq) (*pb.AddW
 		DataType:          req.DataType,
 		DataValue:         req.DataValue,
 		RecordedTimestamp: req.RecordedTimestamp,
-		CreatedAt:         req.CreatedAt,
+		CreatedAt:         data["created_at"].(string),
 	}
 
 	return res, nil
@@ -380,7 +420,8 @@ func (s *AnalyticsStorage) AddWearableData(req *pb.AddWearableDataReq) (*pb.AddW
 func (s *AnalyticsStorage) GetWearableData(req *pb.GetWearableDataReq) (*pb.GetWearableDataRes, error) {
 	collection := s.db.Collection("wearable_data")
 
-	filter := bson.M{"user_id": req.UserId}
+	// Assuming we need to fetch all records or filter by user_id if it's a global request
+	filter := bson.M{} // Use an appropriate filter if needed, e.g., {"user_id": req.UserId}
 
 	cursor, err := collection.Find(context.TODO(), filter)
 	if err != nil {
@@ -419,7 +460,8 @@ func (s *AnalyticsStorage) GetWearableData(req *pb.GetWearableDataReq) (*pb.GetW
 func (s *AnalyticsStorage) GetWearableDataById(req *pb.GetWearableDataByIdReq) (*pb.GetWearableDataByIdRes, error) {
 	collection := s.db.Collection("wearable_data")
 
-	filter := bson.M{"user_id": req.UserId, "_id": req.DataId}
+	// Construct the filter to find the document by data_id and user_id
+	filter := bson.M{"_id": req.DataId}
 
 	var record bson.M
 	err := collection.FindOne(context.TODO(), filter).Decode(&record)
@@ -430,6 +472,7 @@ func (s *AnalyticsStorage) GetWearableDataById(req *pb.GetWearableDataByIdReq) (
 		return nil, fmt.Errorf("failed to find wearable data: %v", err)
 	}
 
+	// Construct the response
 	res := &pb.GetWearableDataByIdRes{
 		Info: &pb.AddWearableDataRes{
 			Id:                record["_id"].(string),
@@ -456,7 +499,7 @@ func (s *AnalyticsStorage) UpdateWearableData(req *pb.UpdateWearableDataReq) (*p
 			"data_type":          req.DataType,
 			"data_value":         req.DataValue,
 			"recorded_timestamp": req.RecordedTimestamp,
-			"updated_at":         req.UpdatedAt,
+			"updated_at":         time.Now().String(),
 		},
 	}
 
@@ -471,7 +514,8 @@ func (s *AnalyticsStorage) UpdateWearableData(req *pb.UpdateWearableDataReq) (*p
 func (s *AnalyticsStorage) DeleteWearableData(req *pb.DeleteWearableDataReq) (*pb.Empty, error) {
 	collection := s.db.Collection("wearable_data")
 
-	filter := bson.M{"_id": req.Id, "user_id": req.UserId}
+	// Construct the filter to find the document by id
+	filter := bson.M{"_id": req.Id}
 
 	_, err := collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
@@ -481,31 +525,37 @@ func (s *AnalyticsStorage) DeleteWearableData(req *pb.DeleteWearableDataReq) (*p
 	return &pb.Empty{}, nil
 }
 
-// GenerateHealthRecommendations generates health recommendations based on the provided data.
-// This method uses Gemini AI for generating personalized recommendations.
-//
-// Parameters:
-// - req: Contains user_id, recommendation_type, description, priority, created_at, and updated_at.
-//
-// Returns:
-//   - A response with generated health recommendations including id, user_id, recommendation_type,
-//     description, priority, created_at, and updated_at.
-//
-// Note:
-//   - Integration with Gemini AI should be implemented here. The AI will process the provided data and
-//     generate appropriate health recommendations based on user-specific information and requirements.
 func (s *AnalyticsStorage) GenerateHealthRecommendations(req *pb.GenerateHealthRecommendationsReq) (*pb.GenerateHealthRecommendationsRes, error) {
-	// TODO: Implement integration with Gemini AI to generate health recommendations
-	// Example: Call Gemini AI service with the provided data and receive generated recommendations
 
-	// Placeholder code, to be replaced with actual implementation
-	return nil, nil
+	collection := s.db.Collection("health_recommendations")
+
+	rsp, err := ai.WorkWithAI(req)
+	if err != nil {
+		log.Fatalln("Error while working with ai", err)
+	}
+
+	res := &pb.GenerateHealthRecommendationsRes{
+		Id:                 primitive.NewObjectID().Hex(),
+		UserId:             rsp.UserId,
+		RecommendationType: rsp.RecommendationType,
+		Description:        rsp.Description,
+		CreatedAt:          time.Now().String(),
+		UpdatedAt:          time.Now().String(),
+	}
+
+	_, err = collection.InsertOne(context.Background(), res)
+	if err != nil {
+		log.Println("Error inserting into database:", err)
+		return nil, err
+	}
+
+	return res, nil
 }
 
 func (s *AnalyticsStorage) GetHealthRecommendationsById(req *pb.GetHealthRecommendationsByIdReq) (*pb.GetHealthRecommendationsByIdRes, error) {
 	collection := s.db.Collection("health_recommendations")
 
-	filter := bson.M{"user_id": req.UserId, "_id": req.RecommendationId}
+	filter := bson.M{"id": req.RecommendationId}
 
 	var record bson.M
 	err := collection.FindOne(context.TODO(), filter).Decode(&record)
@@ -516,15 +566,41 @@ func (s *AnalyticsStorage) GetHealthRecommendationsById(req *pb.GetHealthRecomme
 		return nil, fmt.Errorf("failed to find health recommendation: %v", err)
 	}
 
+	log.Printf("Retrieved record: %+v", record)
+
+	id, ok := record["id"].(string)
+	if !ok || id == "" {
+		return nil, fmt.Errorf("id field is missing or invalid")
+	}
+	userId, ok := record["user_id"].(string)
+	if !ok {
+		userId = ""
+	}
+	recommendationType, ok := record["recommendationtype"].(string)
+	if !ok || recommendationType == "" {
+		return nil, fmt.Errorf("recommendation_type field is missing or invalid")
+	}
+	description, ok := record["description"].(string)
+	if !ok || description == "" {
+		return nil, fmt.Errorf("description field is missing or invalid")
+	}
+	createdAt, ok := record["createdat"].(string)
+	if !ok || createdAt == "" {
+		return nil, fmt.Errorf("created_at field is missing or invalid")
+	}
+	updatedAt, ok := record["updatedat"].(string)
+	if !ok || updatedAt == "" {
+		return nil, fmt.Errorf("updated_at field is missing or invalid")
+	}
+
 	res := &pb.GetHealthRecommendationsByIdRes{
 		Info: &pb.GenerateHealthRecommendationsRes{
-			Id:                 record["_id"].(string),
-			UserId:             record["user_id"].(string),
-			RecommendationType: record["recommendation_type"].(string),
-			Description:        record["description"].(string),
-			Priority:           int32(record["priority"].(int)),
-			CreatedAt:          record["created_at"].(string),
-			UpdatedAt:          record["updated_at"].(string),
+			Id:                 id,
+			UserId:             userId,
+			RecommendationType: recommendationType,
+			Description:        description,
+			CreatedAt:          createdAt,
+			UpdatedAt:          updatedAt,
 		},
 	}
 
@@ -533,13 +609,73 @@ func (s *AnalyticsStorage) GetHealthRecommendationsById(req *pb.GetHealthRecomme
 
 // Health Monitoring
 func (s *AnalyticsStorage) GetRealtimeHealthMonitoring(req *pb.GetRealtimeHealthMonitoringReq) (*pb.GetRealtimeHealthMonitoringRes, error) {
-	return nil, nil
+
+	collection := s.db.Collection("health_monitoring")
+
+	filter := bson.M{"user_id": req.UserId}
+
+	var result struct {
+		UserId         string            `bson:"user_id"`
+		MonitoringData map[string]string `bson:"monitoring_data"`
+	}
+
+	err := collection.FindOne(context.Background(), filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &pb.GetRealtimeHealthMonitoringRes{
+		UserId:         result.UserId,
+		MonitoringData: result.MonitoringData,
+	}
+
+	return res, nil
 }
 
 func (s *AnalyticsStorage) GetDailyHealthSummary(req *pb.GetDailyHealthSummaryReq) (*pb.GetDailyHealthSummaryRes, error) {
-	return nil, nil
+
+	collection := s.db.Collection("daily_health_summaries")
+
+	filter := bson.M{"user_id": req.UserId}
+
+	var result struct {
+		UserId  string `bson:"user_id"`
+		Summary string `bson:"summary"`
+	}
+
+	err := collection.FindOne(context.Background(), filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &pb.GetDailyHealthSummaryRes{
+		UserId:  result.UserId,
+		Summary: result.Summary,
+	}
+
+	return res, nil
 }
 
 func (s *AnalyticsStorage) GetWeeklyHealthSummary(req *pb.GetWeeklyHealthSummaryReq) (*pb.GetWeeklyHealthSummaryRes, error) {
-	return nil, nil
+
+	collection := s.db.Collection("weekly_health_summaries")
+
+	filter := bson.M{"user_id": req.UserId}
+
+	var result struct {
+		UserId  string `bson:"user_id"`
+		Summary string `bson:"summary"`
+	}
+
+	err := collection.FindOne(context.Background(), filter).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &pb.GetWeeklyHealthSummaryRes{
+		UserId:  result.UserId,
+		Summary: result.Summary,
+	}
+
+	return res, nil
 }
