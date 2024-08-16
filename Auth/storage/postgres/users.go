@@ -166,7 +166,6 @@ func (u *UserStorage) ValidateToken(req *users.ValidateTokenRequest) (*users.Emp
 }
 
 func (u *UserStorage) RefreshToken(req *users.RefreshTokenRequest) (*users.TokenResponse, error) {
-	// Implement the logic to refresh a token
 	return nil, nil
 }
 

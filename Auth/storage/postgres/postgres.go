@@ -32,7 +32,7 @@ func NewPostgresStorage() (stg.InitRoot, error) {
 	}
 
 	rdb := redis.NewClient(&redis.Options{
-		Addr: fmt.Sprintf("%s:%d", cfg.RedisHost, cfg.RedisPort),
+		Addr: fmt.Sprintf("%s:%d", "redis", 6379),
 	})
 	
 
