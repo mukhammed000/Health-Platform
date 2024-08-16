@@ -1,26 +1,23 @@
-FROM golang:1.22.5-alpine AS builder
+FROM golang:1.22.6 AS builder
 
 WORKDIR /app
 
 COPY go.mod go.sum ./
-
 RUN go mod download
 
 COPY . .
-COPY .env ./
 
-RUN go build -o main .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o myapp .
 
-FROM alpine:latest  
+FROM alpine:latest
 
-WORKDIR /root/
+WORKDIR /app
 
-COPY --from=builder /app/main .
-COPY --from=builder /app/.env ./
-COPY ./docs /app/docs
+COPY --from=builder /app/myapp .
 COPY --from=builder /app/config/model.conf ./config/
 COPY --from=builder /app/config/policy.csv ./config/
+COPY --from=builder /app/.env .
 
 EXPOSE 8080
 
-CMD ["./main"]
+CMD ["./myapp"]

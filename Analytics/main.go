@@ -1,7 +1,6 @@
 package main
 
 import (
-	"analytics/config"
 	"analytics/service"
 	"analytics/storage/mongo"
 	"log"
@@ -14,7 +13,7 @@ import (
 
 func main() {
 
-	cfg := config.Load()
+	// cfg := config.Load()
 
 	stg, err := mongo.NewMongoStorage()
 	if err != nil {
@@ -22,9 +21,9 @@ func main() {
 	}
 	log.Println("Database connected successfully! ")
 
-	lis, err := net.Listen("tcp", cfg.HTTPPort)
+	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
-		log.Fatal("Error while creating TCP listener", err)
+		log.Fatalf("Error while creating TCP listener: %v", err)
 	}
 	defer lis.Close()
 

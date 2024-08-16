@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  analytics-service:
+    container_name: analytics
+    build: .
+    ports:
+      - "8082:8082"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    external: true
+    name: global-network
+    driver: bridge

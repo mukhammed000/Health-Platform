@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  auth-service:
+    container_name: auth-service
+    build: .
+    ports:
+      - "8081:8081"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    external: true
+    name: global-network
+    driver: bridge

@@ -1,4 +1,4 @@
-FROM golang:1.22.5 AS builder
+FROM golang:1.22.6 AS builder
 
 WORKDIR /app
 
@@ -7,16 +7,15 @@ RUN go mod download
 
 COPY . .
 COPY .env ./
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o myapp .
 
-RUN go build -o main ./cmd
+FROM alpine:latest
 
-FROM debian:bookworm-slim
+WORKDIR /app
 
-WORKDIR /root/
+COPY --from=builder /app/myapp .
+COPY --from=builder /app/.env .
 
-COPY --from=builder /app/main .
-COPY --from=builder /app/.env ./
+EXPOSE 8080
 
-EXPOSE 8081
-
-CMD ["./main"]
+CMD ["./myapp"]

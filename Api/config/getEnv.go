@@ -28,7 +28,7 @@ func Load() Config {
 
 	config.ApiPort = cast.ToString(getOrReturnDefaultValue("API_PORT", ":8080"))
 	config.UsersPort = cast.ToString(getOrReturnDefaultValue("USERS_PORT", ":8081"))
-	config.AnalyticsPort = cast.ToString(getOrReturnDefaultValue("ANALYTICS_PORT", "8082"))
+	config.AnalyticsPort = cast.ToString(getOrReturnDefaultValue("ANALYTICS_PORT", ":8082"))
 
 	config.DefaultOffset = cast.ToString(getOrReturnDefaultValue("DEFAULT_OFFSET", "0"))
 	config.DefaultLimit = cast.ToString(getOrReturnDefaultValue("DEFAULT_LIMIT", "10"))

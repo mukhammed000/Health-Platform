@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  api-gateway:
+    container_name: api-gateway
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    external: true
+    name: global-network
+    driver: bridge
