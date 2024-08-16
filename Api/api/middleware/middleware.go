@@ -2,9 +2,9 @@ package middleware
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
-	"log"
 
 	"api/api/token"
 	"api/config"
@@ -51,13 +51,11 @@ func (a *JwtRoleAuth) GetRole(r *gin.Context) (string, error) {
 		err    error
 	)
 
-	jwtToken := r.Request.Header.Get("Authourization")
-									 
-	if jwtToken == "" {
-		return "unauthorized", nil
-	} else if strings.Contains(jwtToken, "Basic") {
+	jwtToken := r.Request.Header.Get("Authorization")
+	if jwtToken == "" || !strings.HasPrefix(jwtToken, "Bearer ") {
 		return "unauthorized", nil
 	}
+	jwtToken = strings.TrimPrefix(jwtToken, "Bearer ")
 
 	a.jwtHandler.Token = jwtToken
 	a.jwtHandler.SigningKey = config.Load().TokenKey
@@ -68,7 +66,6 @@ func (a *JwtRoleAuth) GetRole(r *gin.Context) (string, error) {
 	}
 
 	role, ok := claims["role"].(string)
-	fmt.Println("role:",role)
 	if !ok {
 		return "unauthorized", fmt.Errorf("role claim not found or not a string")
 	}
@@ -85,6 +82,8 @@ func (a *JwtRoleAuth) CheckPermission(r *gin.Context) (bool, error) {
 
 	method := r.Request.Method
 	path := r.FullPath()
+
+	log.Printf("Checking permissions: role=%s, path=%s, method=%s\n", role, path, method)
 
 	allowed, err := a.enforcer.Enforce(role, path, method)
 	if err != nil {

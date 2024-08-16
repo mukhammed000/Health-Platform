@@ -21,7 +21,7 @@ func main() {
 	}
 	log.Println("Database connected successfully! ")
 
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", "analytics:8082")
 	if err != nil {
 		log.Fatalf("Error while creating TCP listener: %v", err)
 	}
@@ -32,7 +32,7 @@ func main() {
 
 	pb.RegisterAnalyticsServiceServer(server, service)
 
-	log.Println("Server listening at", lis.Addr())
+	log.Println("Server listening at", "8082")
 	if server.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 

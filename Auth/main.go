@@ -1,7 +1,6 @@
 package main
 
 import (
-	"auth/config"
 	"auth/service"
 	"auth/storage/postgres"
 	"log"
@@ -14,15 +13,13 @@ import (
 
 func main() {
 
-	cfg := config.Load()
-
 	stg, err := postgres.NewPostgresStorage()
 	if err != nil {
 		log.Fatalln("Error while connecting to database", err)
 	}
 	log.Println("Database connected successfully! ")
 
-	lis, err := net.Listen("tcp", cfg.HTTPPort)
+	lis, err := net.Listen("tcp", "auth:8081")
 	if err != nil {
 		log.Fatal("Error while creating TCP listener", err)
 	}
@@ -33,7 +30,7 @@ func main() {
 
 	pb.RegisterUsersServiceServer(server, service)
 
-	log.Println("Server listening at", lis.Addr())
+	log.Println("Server listening at", "auth:8081")
 	if server.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 

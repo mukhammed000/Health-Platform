@@ -65,10 +65,10 @@ services:
       - mynetwork
 
   auth-service:
-    container_name: Auth
+    container_name: auth
     build: ./Auth
     ports:
-      - "8081:8080"
+      - "8081:8081"
     networks:
       - mynetwork
 
